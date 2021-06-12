@@ -1,0 +1,28 @@
+﻿<Window x:Class="MultipleBinding.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MultipleBinding"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Slider Name="SliderFontSize" Grid.Row="0" Minimum="10" Maximum="50" Value="20" Margin="10"></Slider>
+        <TextBox Name="TextTextBox" Grid.Row="1" Margin="10">Sample text</TextBox>
+        <ListBox Name="ListColor" Grid.Row="2" Margin="5">
+            <ListBoxItem Tag="Red">Red</ListBoxItem>
+            <ListBoxItem Tag="Blue">Blue</ListBoxItem>
+            <ListBoxItem Tag="Orange">Orange</ListBoxItem>
+        </ListBox>
+        <TextBlock Name="TargetTextBlock" Grid.Row="3" Margin="5" 
+                   FontSize="{Binding ElementName=SliderFontSize, Path=Value, Mode=OneWay}"
+                   Text="{Binding ElementName=TextTextBox, Path=Text, Mode=OneWay}"
+                   Foreground="{Binding ElementName=ListColor, Path=SelectedItem.Tag}"></TextBlock>
+    </Grid>
+</Window>

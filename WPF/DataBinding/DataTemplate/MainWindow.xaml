@@ -1,0 +1,36 @@
+﻿<Window x:Class="DataTemplate.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataTemplate"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <!--my data resources-->
+        <local:PersonList x:Key="ListOfPersons"></local:PersonList>
+        <!--a template for one object-->
+        <DataTemplate x:Key="ListTemplate">
+            <Border BorderBrush="Aqua" BorderThickness="4" Padding="5" HorizontalAlignment="Stretch" CornerRadius="0" Margin="5">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" TextBlock.FontSize="20" TextBlock.FontWeight="Bold">
+                        <TextBlock Text="{Binding FirstName}"></TextBlock>
+                        <TextBlock Text=" "></TextBlock>
+                        <TextBlock Text="{Binding LastName}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Age}"></TextBlock>
+                        <TextBlock Text="{Binding Position}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ListBox ItemsSource="{Binding Source={StaticResource ListOfPersons}}" 
+                 ItemTemplate="{StaticResource ListTemplate}" 
+                 HorizontalAlignment="Stretch">
+            
+        </ListBox>
+    </Grid>
+</Window>

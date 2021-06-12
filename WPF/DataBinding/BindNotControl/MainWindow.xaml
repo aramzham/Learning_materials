@@ -1,0 +1,15 @@
+﻿<Window x:Class="BindNotControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BindNotControl"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <local:MyClass x:Key="DataItem" MyProperty="Sample text in it"></local:MyClass>
+    </Window.Resources>
+    <Grid>
+        <TextBlock Foreground="Blue" FontSize="40" Text="{Binding Source={StaticResource DataItem}, Path=MyProperty}"></TextBlock>
+    </Grid>
+</Window>
