@@ -1,0 +1,54 @@
+<ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" />
+</ItemGroup>
+
+dotnet test
+dotnet test --list-tests
+dotnet test /?
+
+
+Tests should be:
+1) fast
+2) repeatable
+3) isolated (should be independent and not affect other tests)
+4) trustworthy
+5) valuable (not write tests in sake of writing)
+
+group by traits = group by category
+
+
+Test class    --- one instance per test run
+One-time setup    --- initialize data/environment/files, etc.
+
+Setup    --- reset data, create sut, etc.
+Test 1
+Tear down    --- clean up data, dispose of sut, etc.
+
+Setup
+Test 2
+Tear down
+
+One-time tear down    --- clean data/environment/files etc.
+Dispose   --- if IDisposable is implemented
+
+
+Mock real dependencies to test entities in isolated fashion.
+
+Unit is a situational thing - the team decides what makes sense to be a unit for the purposes of their understanding of the system and its testing.
+
+Test Double is a generic term for any case where you replace a production object for testing purposes.
+
+Behavorial tests = interactions between sut and mocks
+
+Strict mock - anything used on mock object must be setup
+
+AAA
+Arrange - we set things up
+Act - perform action on sut
+Assert - we check that result is as expected
+
+Use anonymous values only when they don't have a specific meaning to the sut.
+
+Anonymous values should not affect logical program flow.
