@@ -1,0 +1,40 @@
+The consumer of a GraphQL API defines the data structure it want to receive in a query.
+
+GraphQL is an open source specification created by FB.
+
+Not the verb of the request defines what happens but the query itself.
+
+GraphQL is not tied to HTTP.
+
+
+Schema - entry point for all queries.
+Query - exposes data types.
+
+{
+    __schema{
+        types{
+            name
+        }
+    }
+}
+
+// get schema
+{
+    __type(name:"yourSchemaName"){
+        name
+        fields{
+            name
+            type{
+                name
+                kind
+            }
+        }
+    }
+}
+
+// do not show docs and schema in playground
+const server = new ApolloServer({ typeDefs, resolvers, dataSources, introspection: false });
+
+put playground: false  and you won't have the playground
+
+set debug to false to hide stack traces from end user
