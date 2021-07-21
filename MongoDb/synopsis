@@ -113,3 +113,32 @@ InsertMany doesn't insert documents in a single transaction => ids may not be ad
 If insert and query happen at the same time, WiredTiger (an optimistic concurrency algorithm in mongodb) will make the query wait and will proceed the insert, get the result of it and then execute the query. This way query will always get the latest info (no dirty reads like in SQL (sql will create a view from the table and on that view will perform the query, the insert will go parallel to this)).
 
 for the document {"name":"Pepito", "surname":"Laguna"}, $ is the document, $name then equals "Pepito"
+
+$unwind allows us to create one document per array entry
+
+
+{$filter:{
+	input:<an array>,
+	as:<string>,
+	cond:<expression>
+}}
+where we have 
+input: array field to filter elements
+as: temporary string to rename the field
+cond: condition to evaluate each element in array
+
+
+filteredTempsF:{
+	$filter:{
+		input:"$tempsF",
+		as:"temp",
+		cond:{
+			$eq:[{$type:"$$temp"}, "double"]
+		}
+	}
+}
+
+$ = $$CURRENT = {tempsF:[10, 20, 40], city:"Yerevan"}
+temp = $tempsF = [10,20,40]
+INDEX = 0
+$$temp = $$temp.$$INDEX = $temp.0 = $tempsF.0 = 10
