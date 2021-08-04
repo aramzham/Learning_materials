@@ -9,11 +9,11 @@ namespace DataLayer
 {
     public class ContactRepository : IContactRepository
     {
-        private IDbConnection db;
+        private IDbConnection _db;
 
         public ContactRepository(string connString)
         {
-            db = new SqlConnection(connString);
+            _db = new SqlConnection(connString);
         }
 
         public Contact Add(Contact contact)
@@ -21,14 +21,14 @@ namespace DataLayer
             var sql =
                 "INSERT INTO Contacts (FirstName, LastName, Email, Company, Title) VALUES(@FirstName, @LastName, @Email, @Company, @Title); " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
-            var id = db.Query<int>(sql, contact).Single();
+            var id = _db.Query<int>(sql, contact).Single();
             contact.Id = id;
             return contact;
         }
 
         public Contact Find(int id)
         {
-            return db.Query<Contact>("SELECT * FROM Contacts WHERE Id = @Id", new { id }).SingleOrDefault();
+            return _db.Query<Contact>("SELECT * FROM Contacts WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
         public Contact GetFullContact(int id)
@@ -37,7 +37,7 @@ namespace DataLayer
                 "SELECT * FROM Contacts WHERE Id = @Id; " +
                 "SELECT * FROM Addresses WHERE ContactId = @Id";
 
-            using (var multipleResults = db.QueryMultiple(sql, new { Id = id }))
+            using (var multipleResults = _db.QueryMultiple(sql, new { Id = id }))
             {
                 var contact = multipleResults.Read<Contact>().SingleOrDefault();
 
@@ -80,7 +80,7 @@ namespace DataLayer
 
             foreach (var addr in contact.Addresses.Where(a => a.IsDeleted))
             {
-                db.Execute("DELETE FROM Addresses WHERE Id = @Id", new { addr.Id });
+                _db.Execute("DELETE FROM Addresses WHERE Id = @Id", new { addr.Id });
             }
 
             txScope.Complete();
@@ -91,14 +91,15 @@ namespace DataLayer
             var sql =
                 "INSERT INTO Addresses (ContactId, AddressType, StreetAddress, City, StateId, PostalCode) VALUES(@ContactId, @AddressType, @StreetAddress, @City, @StateId, @PostalCode); " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
-            var id = db.Query<int>(sql, address).Single();
+            // here we call query because in the end we do select for the id 
+            var id = _db.Query<int>(sql, address).Single();
             address.Id = id;
             return address;
         }
 
         public Address Update(Address address)
         {
-            db.Execute("UPDATE Addresses " +
+            _db.Execute("UPDATE Addresses " +
                 "SET AddressType = @AddressType, " +
                 "    StreetAddress = @StreetAddress, " +
                 "    City = @City, " +
@@ -110,12 +111,14 @@ namespace DataLayer
 
         public List<Contact> GetAll()
         {
-            return db.Query<Contact>("SELECT * FROM Contacts").ToList();
+            // explicitly give alias names in query if your code objects' names don't match to ones in _db
+            // SELECT FirstName as FName, LastName... FROM Contacts
+            return _db.Query<Contact>("SELECT * FROM Contacts").ToList();
         }
 
         public void Remove(int id)
         {
-            db.Execute("DELETE FROM Contacts WHERE Id = @Id", new { id });
+            _db.Execute("DELETE FROM Contacts WHERE Id = @Id", new { id });
         }
 
         public Contact Update(Contact contact)
@@ -128,7 +131,7 @@ namespace DataLayer
                 "    Company   = @Company, " +
                 "    Title     = @Title " +
                 "WHERE Id = @Id";
-            db.Execute(sql, contact);
+            _db.Execute(sql, contact);
             return contact;
         }
     }
