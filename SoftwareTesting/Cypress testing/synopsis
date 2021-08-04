@@ -1,0 +1,19 @@
+Before Cypress
+
+- Framework (Mocha, Jasmine, Karma)
+- Assertion Library (Chai, Expect.js)
+- install Selenium
+- Selenium wrapper (Protractor, Nightwatch)
+- Other (Sinon, TestDouble)
+
+Cypress contains them all in one testing framework.
+
+
+visit, get, request, exec, route are parent command => they are the heads of command chain, they cannot be secondary commands
+
+cy.get('something=username').click() , here click is a child command
+click, type, find, should are child commands
+
+contains, screenshot, scrollTo, wait are dual commands (both child and parent)
+
+Cypress retries the last command in the chain before assertion => command, assertion, command assertion pattern will use the cypress retriability thoroughly

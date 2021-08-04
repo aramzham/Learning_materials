@@ -1,0 +1,144 @@
+NoSQL = not only SQL
+
+Advantages of Document Databases:
+1. easy to store objects as you don't normalize the data and store it entirely => easy to retrieve it
+2. flexible schema, you can have any structured or unstructured documents together, achieved using JSON
+3. easy to scale horizontaly
+
+
+C - create or insert - db.collection.insertOne();
+R - read or find - db.collection.find();
+U - update - db.collection.updateOne();
+D - delete - db.collection.deleteOne();
+
+db.createCollection("collectionName"); - create a collection
+
+show dbs 
+show collections
+
+db.collectionName.find().pretty() - get all from collection and format the output
+
+db.collectionName.insertMany([{},{},{}]) - insert many objects at the same time
+
+{runtime:{$eq:11}} == {runtime:11}
+
+projection -  which fields to see from result set
+
+SORT {title:1} - ascending order
+SORT {title:-1} - descending order
+
+db.movies.find({runtime:11}).pretty().limit(1) - find records with runtime=11 and take 1 record
+
+db.movies.find({runtime:11},{runtime:1, title:1, _id:0}).pretty().limit(3) - include runtime, title and don't include _id (as it's included by default)
+
+db.movies.find({runtime:11},{runtime:1, title:1,_id:0}).pretty().limit(5).sort({title:-1}) - order by title descending
+
+db.movies.find({runtime:11},{runtime:1, title:1,_id:0}).pretty().limit(5).sort({title:-1}).readConcern("linearizable").maxTimeMS(10000) - specified readConcern and max timeout
+
+w:(n) - acknowlegment from primary + (n-1) secondary nodes
+
+upsert = insert + update
+
+db.movies.updateOne({title:"The Old Crocodile"}, {$set:{"title":"The New Crocodile"}}) - update first record record with this title and set title to the new one
+
+db.movies.find({year:{$eq:1988}}).count() - count of movies produces on 1988
+
+db.movies.updateMany({year:1988}, {$set:{"year":2025}}) - set all 1988 year movies to year 2025
+
+db.movies.updateMany({year:1988}, {$set:{"year":2025}}, {upsert:true}) - when you don't have a record with year = 1988, it will insert one and change its year to 2025
+
+db.movies.updateMany({year:1988}, {$set:{"title":"MySuperFunnyTitle", "awards.wins":9}}, {upsert:true})
+
+'replace' One or Many replaces the entire document with the one specified
+
+delete doesn't drop indexes
+
+db.movies.remove({runtime:35},true) - with 'true' you remove one document
+
+db.movies.remove({runtime:35}) - will remove all documents with runtime=35
+
+db.movies.remove({}) - remove every document from movies collection
+
+no foreign keys and joins in MongoDB
+
+db.user.updateMany({}, {$set:{email:''}}) - you will add a field(a column) to your user collection(table), but you don't need to do that as MongoDB doesn't need any type of schema
+
+db.people.createIndex({name:1, age:-1}) - create an index on name ascending and age descending
+
+db.user.drop() - drop a collection (with indexes)
+
+
+
+Mongo doesn't enforce a schema, but documents inside the same collection should have a similar structure as the application using it expects some kind of structured and consistent data.
+
+
+db.aircraft.find({}, {code:0, capacity:0, range:0}) - do not bring code, capacity and range in resulting set
+
+db.collectionName.find() - returns a cursor on which you can use pretty(), limit(n), skip(n), sort({...}), count() etc.
+
+
+MongodDB doesn't guarantee the order of documents unless you use sort().
+
+.findOne(query, projection) - is like .FirstOrDefault(), returns a document, if no document matches the criteria, the method returns null, methods like pretty() or count() won't work on findOne
+
+
+filtering syntax = {field: {$operator: value}} $eq, $ne, $in, $nin, $lt, $lte, $gt, $gte
+
+to filter by dates you must specify some thing like this
+- db.flights.find({departureDate:new Date("2020-02-20T23:00:00Z")})
+or
+- db.flights.find({departureDate:ISODate("2020-02-20T23:00:00Z")})
+
+comparing by objects or arrays, the fields and positions must be the same
+
+
+db.crew.find({skills:{$in:["engineering","management"]}}) - if skills is an array itself then the filter works like this 'if any skill in $in query array matches any skill then those documents will be in the result set'
+
+db.aircraft.find({model:{$in:[/^A/,/737/]}}) - bring all aircrafts starting with A or containing 737 in model name
+
+
+
+Aggregation = find documents | filter | grouping | sorting
+
+Aggregation framework:
+. uses a "pipeline" approach
+. set of predefined pipeline operators
+. operators can be repeated
+. operators needn't produce output
+. easy to setup
+. designed for small to mid-sized collections
+
+InsertMany doesn't insert documents in a single transaction => ids may not be adjacents because at the same time there may happen another insert that may sneak around and take adjacent id
+
+If insert and query happen at the same time, WiredTiger (an optimistic concurrency algorithm in mongodb) will make the query wait and will proceed the insert, get the result of it and then execute the query. This way query will always get the latest info (no dirty reads like in SQL (sql will create a view from the table and on that view will perform the query, the insert will go parallel to this)).
+
+for the document {"name":"Pepito", "surname":"Laguna"}, $ is the document, $name then equals "Pepito"
+
+$unwind allows us to create one document per array entry
+
+
+{$filter:{
+	input:<an array>,
+	as:<string>,
+	cond:<expression>
+}}
+where we have 
+input: array field to filter elements
+as: temporary string to rename the field
+cond: condition to evaluate each element in array
+
+
+filteredTempsF:{
+	$filter:{
+		input:"$tempsF",
+		as:"temp",
+		cond:{
+			$eq:[{$type:"$$temp"}, "double"]
+		}
+	}
+}
+
+$ = $$CURRENT = {tempsF:[10, 20, 40], city:"Yerevan"}
+temp = $tempsF = [10,20,40]
+INDEX = 0
+$$temp = $$temp.$$INDEX = $temp.0 = $tempsF.0 = 10
