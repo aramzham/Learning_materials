@@ -33,26 +33,22 @@ namespace DataLayer
 
         public Contact GetFullContact(int id)
         {
-            var sql =
-                "SELECT * FROM Contacts WHERE Id = @Id; " +
-                "SELECT * FROM Addresses WHERE ContactId = @Id";
+            const string sql = "SELECT * FROM Contacts WHERE Id = @Id; " +
+                               "SELECT * FROM Addresses WHERE ContactId = @Id";
 
-            using (var multipleResults = _db.QueryMultiple(sql, new { Id = id }))
-            {
-                var contact = multipleResults.Read<Contact>().SingleOrDefault();
+            using var multipleResults = _db.QueryMultiple(sql, new { Id = id });
 
-                var addresses = multipleResults.Read<Address>().ToList();
-                if (contact != null && addresses != null)
-                {
-                    contact.Addresses.AddRange(addresses);
-                }
+            var contact = multipleResults.Read<Contact>().SingleOrDefault();
+            var addresses = multipleResults.Read<Address>().ToList();
 
-                return contact;
-            }
+            contact?.Addresses.AddRange(addresses);
+
+            return contact;
         }
 
         public void Save(Contact contact)
         {
+            // use System.Data.SqlClient 4.6 or higher or Microsoft.Data.SqlClient
             using var txScope = new TransactionScope();
 
             if (contact.IsNew)

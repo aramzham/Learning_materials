@@ -40,6 +40,7 @@ namespace DataLayer
 
         public void Remove(int id)
         {
+            // from Contact Dapper knows which table to get into
             _db.Delete(new Contact { Id = id });
         }
 

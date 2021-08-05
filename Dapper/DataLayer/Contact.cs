@@ -12,10 +12,10 @@ namespace DataLayer
         public string Company { get; set; }
         public string Title { get; set; }
 
-        [Computed]
+        [Computed] // computed fields won't be manipulated for the db
         public bool IsNew => Id == default;
 
-        [Write(false)]
+        [Write(false)] // there's no such column in the db, so we specify false to omit it from writing to db
         public List<Address> Addresses { get; } = new List<Address>();
     }
 }
