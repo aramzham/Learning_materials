@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using DataLayer;
@@ -14,19 +15,118 @@ namespace Runner
         {
             Initialize();
 
-            GetAll_ShouldReturn6Results();
+            //GetAll_ShouldReturn6Results();
 
-            var id = Insert_should_assign_identity_to_new_entity();
-            Find_should_retrieve_existing_entity(id);
-            Modify_should_update_existing_entity(id);
-            Delete_should_remove_entity(id);
+            //var id = Insert_should_assign_identity_to_new_entity();
+            //Find_should_retrieve_existing_entity(id);
+            //Modify_should_update_existing_entity(id);
+            //Delete_should_remove_entity(id);
 
             //var repository = CreateRepository();
             //var mj = repository.GetFullContact(1);
             //mj.Output();
+
+            //List_support_should_produce_correct_results();
+            //Dynamic_support_should_produce_correct_results();
+
+            //Bulk_insert_should_insert_4_rows();
+
+            //GetIllinoisAddresses();
+
+            Get_all_should_return_6_results_with_addresses();
+
+            Get_all_should_return_6_results_mysql();
         }
 
         #region CRUD
+
+        static void Get_all_should_return_6_results_mysql()
+        {
+            var repository = new ContactRepositoryMySql(_config.GetConnectionString("MySqlConnection"));
+
+            // act
+            var contacts = repository.GetAll();
+
+            // assert
+            Console.WriteLine($"Count: {contacts.Count}");
+            Debug.Assert(contacts.Count == 6);
+            contacts.Output();
+        }
+
+        static void Get_all_should_return_6_results_with_addresses()
+        {
+            var repository = CreateRepositoryEx();
+
+            // act
+            var contacts = repository.GetAllContactsWithAddresses();
+
+            // assert
+            Console.WriteLine($"Count: {contacts.Count}");
+            contacts.Output();
+            Debug.Assert(contacts.Count == 6);
+            Debug.Assert(contacts[0].Addresses.Count == 2);
+        }
+
+        static void GetIllinoisAddresses()
+        {
+            // arrange
+            var repository = CreateRepositoryEx();
+
+            // act
+            var addresses = repository.GetAddressesByState(17);
+
+            // assert
+            Debug.Assert(addresses.Count == 2);
+            addresses.Output();
+        }
+
+        static void Bulk_insert_should_insert_4_rows()
+        {
+            // arrange
+            var repository = CreateRepositoryEx();
+            var contacts = new List<Contact>
+            {
+                new() { FirstName = "Charles", LastName = "Barkley" },
+                new() { FirstName = "Scottie", LastName = "Pippen" },
+                new() { FirstName = "Tim", LastName = "Duncan" },
+                new() { FirstName = "Patrick", LastName = "Ewing" }
+            };
+
+            // act
+            var rowsAffected = repository.BulkInsertContacts(contacts);
+
+            // assert
+            Console.WriteLine($"Rows inserted: {rowsAffected}");
+            Debug.Assert(rowsAffected == 4);
+        }
+
+        static void Dynamic_support_should_produce_correct_results()
+        {
+            // arrange
+            var repository = CreateRepositoryEx();
+
+            // act
+            var contacts = repository.GetDynamicContactsById(1, 2, 4);
+
+            // assert
+            Debug.Assert(contacts.Count == 3);
+            Console.WriteLine($"First FirstName is: {contacts[0].FirstName}");
+            contacts.Output();
+        }
+
+        static void List_support_should_produce_correct_results()
+        {
+            // arrange
+            var repository = CreateRepositoryEx();
+
+            // act
+            var contacts = repository.GetContactsById(1, 2, 4);
+
+            // assert
+            Debug.Assert(contacts.Count == 3);
+            contacts.Output();
+        }
+
         static void Delete_should_remove_entity(int id)
         {
             // arrange
@@ -146,5 +246,7 @@ namespace Runner
         //private static IContactRepository CreateRepository() => new ContactRepository(_config.GetConnectionString("Default"));
         private static IContactRepository CreateRepository() => new ContactRepositorySp(_config.GetConnectionString("Default"));
         //private static IContactRepository CreateRepository() => new ContactRepositoryContrib(_config.GetConnectionString("Default"));
+
+        private static ContactRepositoryEx CreateRepositoryEx() => new(_config.GetConnectionString("Default"));
     }
 }
