@@ -143,7 +143,8 @@ namespace Runner
             _config = builder.Build();
         }
 
-        private static IContactRepository CreateRepository() => new ContactRepository(_config.GetConnectionString("Default"));
+        //private static IContactRepository CreateRepository() => new ContactRepository(_config.GetConnectionString("Default"));
+        private static IContactRepository CreateRepository() => new ContactRepositorySp(_config.GetConnectionString("Default"));
         //private static IContactRepository CreateRepository() => new ContactRepositoryContrib(_config.GetConnectionString("Default"));
     }
 }

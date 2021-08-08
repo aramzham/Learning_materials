@@ -71,6 +71,9 @@
     <Build Include="dbo\Stored Procedures\GetContact.sql" />
     <Build Include="dbo\Stored Procedures\SaveAddress.sql" />
     <Build Include="dbo\Stored Procedures\SaveContact.sql" />
+    <Build Include="dbo\Stored Procedures\AddContact.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateContact.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllContacts.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment-seed-data.sql" />
