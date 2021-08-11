@@ -44,3 +44,15 @@ module UnitsOfMeasure =
 
     let value1 = 180000.0<mile>
     printfn $"{value1}mile = {mile.asMeter * value1 / 1000.0}km"
+
+module TypeInference = 
+    let doSomething f x = 
+        let y = f(x+1)
+        "hello " + y
+
+    let func x = 
+        $"{x*10}"
+    printfn $"{doSomething func 3}"
+    // if you add an int to something => it must be an int => x is an int
+    // f is a function that accepts an int parameter
+    // if you add something to string => it must be a string => doSomething's return type is string
