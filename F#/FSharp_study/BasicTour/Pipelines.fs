@@ -39,3 +39,11 @@
         List.filter isOdd >> List.map (square >> addOne)
 
     printfn $"processing {numbers} through 'squareOddValuesAndAddOneComposition' produces: {squareOddValuesAndAddOneComposition numbers}"
+
+    let addTwo x = x + 2
+    let double x = x + x
+    let mathSquare x = x * x
+
+    let returnValueFromPipeline = 5 |> addTwo |> double |> mathSquare
+
+    printfn $"{returnValueFromPipeline}"
