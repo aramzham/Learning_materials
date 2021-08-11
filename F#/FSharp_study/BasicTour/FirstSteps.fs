@@ -56,3 +56,13 @@ module TypeInference =
     // if you add an int to something => it must be an int => x is an int
     // f is a function that accepts an int parameter
     // if you add something to string => it must be a string => doSomething's return type is string
+
+module Composition = 
+    let addOne x = x + 1
+    let double x = 2 * x
+    let addOne_double = 
+        addOne >> double
+        // return type of addOne goes as input parameter for double
+        // so like you glue 2 functions
+
+    printfn $"{addOne_double 5}"
