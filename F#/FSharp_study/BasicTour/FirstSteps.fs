@@ -57,7 +57,7 @@ module TypeInference =
     // f is a function that accepts an int parameter
     // if you add something to string => it must be a string => doSomething's return type is string
 
-module Composition = 
+module FunctionComposition = 
     let addOne x = x + 1
     let double x = 2 * x
     let addOne_double = 
@@ -66,3 +66,23 @@ module Composition =
         // so like you glue 2 functions
 
     printfn $"{addOne_double 5}"
+
+module TypeComposition = 
+    type CheckNumber = int
+    type CardNumber = string
+    type CardType = Visa | MasterCard
+    type CreditCardInfo = CardNumber * CardType
+
+    type PaymentMethod =
+        | Cash
+        | Check of CheckNumber
+        | Card of CreditCardInfo
+
+    type PaymentAmount = decimal
+    type Currency = EUR | USD
+
+    type Payment = {
+        Amount: PaymentAmount
+        Currency: Currency
+        Method: PaymentMethod
+    }
