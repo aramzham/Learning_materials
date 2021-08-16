@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FakeDataInserter
 {
     public class Person
     {
+        [Key] public string Id { get; set; } = Guid.NewGuid().ToString();
+
         public string Name {get;set;} = Faker.Name.FullName();
 
         public Address Address {get;set;} = new();
@@ -17,7 +20,7 @@ namespace FakeDataInserter
 
         public string PassportNumber {get;set;} = Faker.Identification.UsPassportNumber();
 
-        public IEnumerable<string> EmailIds { get; set; } = new List<string>();
+        public ICollection<Email> Emails { get; set; }
 
         public int PersonalCode {get;set;} = Faker.RandomNumber.Next();
 

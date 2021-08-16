@@ -14,5 +14,20 @@ namespace GraphQL_Api.GQL.QueryTypes
         {
             return client.GetDatabase("testDb").GetCollection<Person>("People").Find(new BsonDocument()).ToList();
         }
+
+        public IEnumerable<Person> GetAllWithEmails([Service] IMongoClient client)
+        {
+            var lookup = new[] {
+                new BsonDocument("$lookup",
+                    new BsonDocument
+                    {
+                        {"from", "Emails"},
+                        {"localField", "EmailIds"},
+                        {"foreignField", "_id"},
+                        {"as", "Emails"}
+                    })
+            };
+            return client.GetDatabase("testDb").GetCollection<Person>("People").Aggregate<Person>(lookup).ToList();
+        }
     }
 }
