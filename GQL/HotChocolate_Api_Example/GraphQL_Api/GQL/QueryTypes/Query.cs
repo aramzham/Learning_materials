@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GraphQL_Api.GQL.Models;
 using HotChocolate;
+using HotChocolate.Data;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -10,11 +11,15 @@ namespace GraphQL_Api.GQL.QueryTypes
     {
         //[UseDbContext(typeof(AppDbContext))] in HotChocolate.Data to make use of pooled db context
         // then turn [Service] to [ScopedService]
+        [UseFiltering]
+        [UseSorting]
         public IEnumerable<Person> GetAll([Service] IMongoClient client)
         {
             return client.GetDatabase("testDb").GetCollection<Person>("People").Find(new BsonDocument()).ToList();
         }
 
+        [UseFiltering]
+        [UseSorting]
         public IEnumerable<Person> GetAllWithEmails([Service] IMongoClient client)
         {
             var lookup = new[] {
@@ -31,3 +36,12 @@ namespace GraphQL_Api.GQL.QueryTypes
         }
     }
 }
+
+//query sorting
+//{
+//    all(order:{ companyCode: DESC}){
+//        name
+//            socialInsuranceNumber
+//        companyCode
+//    }
+//}

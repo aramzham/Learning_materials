@@ -33,7 +33,7 @@ namespace GraphQL_Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer().AddQueryType<Query>().AddType<PersonType>();
+            services.AddGraphQLServer().AddQueryType<Query>().AddType<PersonType>().AddFiltering().AddSorting();
 
             services.AddScoped<IMongoClient, MongoClient>(
                 _ => new MongoClient(Configuration.GetConnectionString("Mongodb"))
