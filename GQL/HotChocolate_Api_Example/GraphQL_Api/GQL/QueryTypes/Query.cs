@@ -45,3 +45,11 @@ namespace GraphQL_Api.GQL.QueryTypes
 //        companyCode
 //    }
 //}
+
+//query filtering
+//{
+//    all(where: { name: { eq: "Prudence Bogisich"} }){
+//        name
+//            socialInsuranceNumber
+//    }
+//}

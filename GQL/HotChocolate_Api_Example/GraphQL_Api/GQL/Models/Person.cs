@@ -12,7 +12,7 @@ namespace GraphQL_Api.GQL.Models
     [GraphQLDescription("Personal information of every person in the neighborhood")]
     public class Person
     {
-        [Key]
+        [Key, BsonId, BsonRepresentation(BsonType.ObjectId), BsonIgnoreIfNull]
         public string Id { get; set; }
 
         public string Name { get; set; }

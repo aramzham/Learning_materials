@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL_Api.GQL.MutationTypes;
 using GraphQL_Api.GQL.QueryTypes;
 using GraphQL_Api.GQL.Types;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +34,7 @@ namespace GraphQL_Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer().AddQueryType<Query>().AddType<PersonType>().AddFiltering().AddSorting();
+            services.AddGraphQLServer().AddQueryType<Query>().AddMutationType<Mutation>().AddType<PersonType>().AddFiltering().AddSorting();
 
             services.AddScoped<IMongoClient, MongoClient>(
                 _ => new MongoClient(Configuration.GetConnectionString("Mongodb"))
