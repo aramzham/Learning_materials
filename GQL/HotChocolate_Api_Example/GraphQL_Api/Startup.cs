@@ -7,7 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL_Api.GQL.MutationTypes;
 using GraphQL_Api.GQL.QueryTypes;
+using GraphQL_Api.GQL.SubscriptionTypes;
+using GraphQL_Api.GQL.Types;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -32,7 +35,15 @@ namespace GraphQL_Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer().AddQueryType<Query>();
+            services
+                .AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
+                .AddSubscriptionType<Subscription>()
+                .AddType<PersonType>()
+                .AddFiltering()
+                .AddSorting()
+                .AddInMemorySubscriptions(); // change to a persistence layer in production
 
             services.AddScoped<IMongoClient, MongoClient>(
                 _ => new MongoClient(Configuration.GetConnectionString("Mongodb"))
@@ -62,6 +73,8 @@ namespace GraphQL_Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseWebSockets();
 
             app.UseRouting();
 
