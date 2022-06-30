@@ -1,0 +1,1 @@
+﻿host_os = "osx" // if you want to put this file in higher priority, then use this command 'terraform console -var-file="dev.tfvars"'

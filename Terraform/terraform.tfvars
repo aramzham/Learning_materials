@@ -1,0 +1,1 @@
+﻿host_os = "windows" // you can override even this value by providing this command in terminal 'terraform console -var="host_os=unix"'
