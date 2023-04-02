@@ -1,0 +1,49 @@
+To begin with Windows download rustup-init.exe (https://www.rust-lang.org/tools/install).
+Check if everything installed correctly with 'rustc --version'.
+Then install the build tools (rustup toolchain install stable-x86_64-pc-windows-gnu).
+
+
+For better developer experience download JetBrains IntelliJ with Rust plugin (https://plugins.jetbrains.com/plugin/8182-rust).
+
+
+Run 'cargo build' to build your project.
+
+
+Rust is static and strongly typed language.
+Static - we know all of the data types of all variables at compile time.
+Strong - enforces rules on data type assignments (not pointer friendly).
+
+Compiled language - the compiler takes your source code and compiles to native byte code.
+Interpreted language - needs special program called Interpreter to run. An interpreter is a machine-code program compiles or interprets your code on fly while it's running.
+
+
+8-bit integer
+u8 - 0..255
+i8 - -128..127
+
+
+Rust uses 4 byte characters meaning you can store 4,294,967,296 characters in Unicode-32 table, literally any language letter or emoji existing.
+
+
+Scalar vs Compound data types
+scalar means that it holds a single value in a variable, compound stores multiple.
+primitive types are those types that exist in language by default (they can be both scalar(like int or bool) or compound(like arrays or tuples)).
+
+
+Rust has 2 different types for strings:
+String(with capital letter) and &str(string slice).
+Both are vectors of u8 data.
+String is mutable, &str is immutable.
+String is stored on the heap because it grow and shrink in size so it cannot be stored on the stack, &str can be stored on the heap, stack or embedded in the compiled code.
+
+
+Variables in Rust are immutable by default.
+It's designed for safety, speed, concurrency. 
+If your variable can't change at runtime then multiple threads can use it without locking it.
+Plus, the compiler can emit more efficient machine code for them because it knows that the value won't change.
+
+
+const value cannot be shadowed in comparison to immutable variables.
+
+
+Rust doesn't have a 'null' data type.
