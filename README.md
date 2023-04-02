@@ -9,5 +9,5 @@
   <li><a href="https://github.com/aramzham/Learning_materials/tree/main/WPF">WPF</a></li>
   <li><a href="https://github.com/aramzham/Learning_materials/tree/main/Dapper">Dapper</a></li>
   <li><a href="https://github.com/aramzham/Learning_materials/tree/main/F%23">F# basics</a></li>
-  <li><a href="https://github.com/aramzham/Learning_materials/tree/main/Rust"></a>Rust basics</li>
+  <li><a href="https://github.com/aramzham/Learning_materials/tree/main/Rust">Rust basics</a></li>
 </ul>
