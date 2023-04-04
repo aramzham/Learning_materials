@@ -54,3 +54,7 @@ Ownership and borrowing apply to data on the heap only.
 There can be 1 and only 1 owner of the data at a given time.
 
 Borrowing allows another variable to take temporary ownership of data without deallocating the original variable.
+
+
+Traits define shared behavior among structs.
+Traits are analogous to interfaces in OOP languages.
