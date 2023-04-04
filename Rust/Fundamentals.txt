@@ -47,3 +47,10 @@ const value cannot be shadowed in comparison to immutable variables.
 
 
 Rust doesn't have a 'null' data type.
+
+
+Ownership and borrowing apply to data on the heap only.
+
+There can be 1 and only 1 owner of the data at a given time.
+
+Borrowing allows another variable to take temporary ownership of data without deallocating the original variable.
