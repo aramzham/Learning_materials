@@ -58,3 +58,16 @@ Borrowing allows another variable to take temporary ownership of data without de
 
 Traits define shared behavior among structs.
 Traits are analogous to interfaces in OOP languages.
+
+
+VecDeque - shorthand for vector double ended queue.
+Can add and remove from the front or the back.
+Cannot sort the elements of a VecDeque.
+
+
+iter() iterates over a collection and cannot change those values.
+iter_mut() iterates over a collection and allows changing of those values.
+
+
+Rust has Hash Maps and Btree Maps.
+When you want your keys to be ordered then use Btree Map.
