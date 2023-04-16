@@ -71,3 +71,18 @@ iter_mut() iterates over a collection and allows changing of those values.
 
 Rust has Hash Maps and Btree Maps.
 When you want your keys to be ordered then use Btree Map.
+
+
+For using generics there's no performance penalty as the <T> placeholder will be replaced by a real type during the compliation.
+
+
+When you want to combine 2 traits in a single constraint use + like this: fn ops<T>(o1: T, o2: T) -> T where T: Add<Output = T> + Sub<Output = T> { // your code}
+
+
+Concurrent execution happens on a machine with a single CPU where the task scheduler gives certain time to each thread to execute.
+
+Parallel execution happens when you have multiple CPUs or a single on with many cores where each CPU is doing its own job parallely.
+
+
+A thread is an independent unit of execution with resources like memory or CPU time allocated to it.
+Even if they work in the same program, it's like having 2 different programs running in 1.
