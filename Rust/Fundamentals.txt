@@ -86,3 +86,17 @@ Parallel execution happens when you have multiple CPUs or a single on with many 
 
 A thread is an independent unit of execution with resources like memory or CPU time allocated to it.
 Even if they work in the same program, it's like having 2 different programs running in 1.
+
+
+When the program ends so do the all threads.
+
+
+When we compile (rustc) code, the binary that results from compilation is called crate (whether it's a library or an executable).
+
+
+Use 'cargo clean' to clean the project from build files.
+Use 'cargo doc' or 'cargo rustdoc' to generate documentation from code comments (document what and why and not how).
+
+
+Crates are archived source code files, they are not built files.
+That's why you'd need .lock file to correctly build your dependencies.
