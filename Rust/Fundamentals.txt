@@ -100,3 +100,59 @@ Use 'cargo doc' or 'cargo rustdoc' to generate documentation from code comments 
 
 Crates are archived source code files, they are not built files.
 That's why you'd need .lock file to correctly build your dependencies.
+
+Crate is a collection of Rust source code files.
+It can be EITHER a binary crate which is compiled and represents an executable program OR a library crate with bunch of helpful stuff that your program may use.
+
+
+Vectors are like List<> in C#.
+
+
+The first parameter for methods is the struct itself.
+
+
+Associated functions are like methods but they don't require the self parameter and are called from the type itself (just like static methods in C#).
+
+
+Tuple structs lie somewhere between tuples and structs.
+They are used where naming each field will be an overkill or it's very obvious.
+F.e. struct Color(u8, u8, u8) that represents RGB, everyone knows that first parameter is red, then green, then blue.
+
+
+Anything you define with generics will transform into a concrete type at compile time.
+
+
+Box<T> is often called as Smart Pointer.
+It provides additional functionality beyond references.
+
+Box<T> has ownership of the data it points to.
+When Box<T> goes out of scope it deallocates the heap memory.
+
+A valid use case of Box<T> may be:
+- transfer ownership of data rather than copy it on the stack
+- avoid copying large amounts of stack data
+
+
+Trait is a collection of methods (like interfaces in C#).
+
+
+Lifetime annotation: 'a. Generally lowercase letters are used for shortness.
+
+
+Lifetime applies only to references, value types don't get them.
+
+
+Rust doesn't have the traditional 'null' value to specify the absence of value.
+Instead Rust has an enum Option<T> { Some(T), None } which represents a state where there might be a value.
+
+
+There are no traditional exceptions in Rust.
+For that there are recoverable and unrecoverable error types.
+Recoverable errors are handled with Result<T,E> type, unrecoverable ones - with panic! macro.
+
+enum Result<T,E> {
+	Ok(T),
+	Err(E)
+}
+
+Calling panic! marcro with terminate the program immediately and stop the execution.
