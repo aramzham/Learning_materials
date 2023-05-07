@@ -1,5 +1,6 @@
 use std::{env, fs, path};
 use std::collections::HashMap;
+use std::hash::Hash;
 
 fn main() {
     // 1. read in a text file
@@ -19,13 +20,17 @@ fn main() {
         println!("{:?}", e);
         return;
     }
+
+    // 2. count the number of time each word occurs
+    let map = count_words(file_result.unwrap());
     
-    let map = count_words(file_result.unwrap()); // 2. count the number of time each word occurs
-    
-    // 3. print a message with the most common words and how many times they appeared
-    for key in map.keys() {
-        if key.len() >= 2 && map[key] >= 2 {
-            println!("{} occured {} times", key, map[key]);
+    // 3. print a message with the top 5 most common words and how many times they appeared
+    let mut vec: Vec<_> = map.iter().collect();
+    vec.sort_by_key(|k| k.1);
+    vec.reverse();
+    for element in vec.iter().take(5) {
+        if element.0.len() >= 2 && map[element.0] >= 2 {
+            println!("{} occured {} times", element.0, map[element.0]);
         }
     }
 }
@@ -33,7 +38,6 @@ fn main() {
 fn count_words(input: String) -> HashMap<String, i32> {
     let mut map = HashMap::new();
     let split = input.split_whitespace();
-    // TODO: ignore capitalization
     for s in split {
         let lowercase_word = s.to_ascii_lowercase();
         if !map.contains_key(&lowercase_word) {
@@ -44,4 +48,10 @@ fn count_words(input: String) -> HashMap<String, i32> {
     }
     
     map
+    
+    // // more elegant way to do the same function
+    // let mut word_counts: HashMap<&str, u32> = HashMap::new();
+    // for word in all_words.iter() {
+    //     *word_counts.entry(word).or_insert(0) += 1;
+    // }
 }
