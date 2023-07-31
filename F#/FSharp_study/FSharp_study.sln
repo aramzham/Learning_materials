@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BasicTour", "BasicTour\BasicTour.fsproj", "{769899CF-F77E-43DF-A177-A44F33D44319}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Basics", "Basics\Basics.fsproj", "{E88E45F6-5D87-41E8-9004-3A9787A9B03F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{769899CF-F77E-43DF-A177-A44F33D44319}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{769899CF-F77E-43DF-A177-A44F33D44319}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{769899CF-F77E-43DF-A177-A44F33D44319}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
