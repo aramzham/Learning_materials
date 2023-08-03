@@ -20,3 +20,13 @@ let p1 =
 // let p3 = {FirstName = "Predrag";LastName = "Maksimovic";Age = 40; MoreProperties="hello" }
 
 printfn $"%A{p1}"
+
+type GenericRecord<'a, 'b> = {
+    Field1: 'a
+    Field2: 'b
+}
+
+let r1 = {Field1 = 1.0;Field2 = 3 }
+printfn $"%A{r1}"
+let r2 = {Field1="x"; Field2=true}
+printfn $"%A{r2}"

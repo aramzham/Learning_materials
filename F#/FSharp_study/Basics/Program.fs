@@ -68,4 +68,13 @@ printfn $"%d{20 |> (10 |> add)}" // 30
 [<EntryPoint>] // explicitly specifying the entry point
 let main argv = // main is a conventional name, it must have one parameter, argv is again a convention
     printfn "%A" argv
+    
+    Console.WriteLine("hello from transaction processor")
+    
+    Console.Write("(d)eposit, (w)ithdraw or e(x)it")
+    let action = Console.ReadLine()
+    printfn $"You told me to do this: %A{action}"
+    
+    Console.WriteLine("Bye!")
+    
     0 // must return a value
