@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BasicTour", "BasicTour\Basi
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Basics", "Basics\Basics.fsproj", "{E88E45F6-5D87-41E8-9004-3A9787A9B03F}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ControlFlowAndOrganization", "ControlFlowAndOrganization\ControlFlowAndOrganization.fsproj", "{2BD94ABD-EE03-409F-AF06-DB5A57E29919}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E88E45F6-5D87-41E8-9004-3A9787A9B03F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD94ABD-EE03-409F-AF06-DB5A57E29919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD94ABD-EE03-409F-AF06-DB5A57E29919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD94ABD-EE03-409F-AF06-DB5A57E29919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD94ABD-EE03-409F-AF06-DB5A57E29919}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
