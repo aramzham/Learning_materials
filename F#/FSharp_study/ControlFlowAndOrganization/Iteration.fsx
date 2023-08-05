@@ -38,7 +38,7 @@ printfn $"%A{[for x in 1..5 -> x*x]}"
 let nestedLoopResult = [
     for r in 1..8 do
         for c in 1..8 do
-            if r <> c then yield (r,c)
+            if r <> c then yield (r,c) // <> and not != is used in F#
 ]
 
 printfn $"%A{nestedLoopResult}"
