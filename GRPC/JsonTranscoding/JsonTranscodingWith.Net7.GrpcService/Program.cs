@@ -1,8 +1,11 @@
+using JsonTranscodingWith.Net7.GrpcService.Data;
 using JsonTranscodingWith.Net7.GrpcService.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
+builder.Services.AddDbContextPool<AppDbContext>(o => o.UseSqlite("Data Source=ToDoDatabase.db"));
 
 var app = builder.Build();
 

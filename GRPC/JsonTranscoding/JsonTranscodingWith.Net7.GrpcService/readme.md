@@ -12,3 +12,23 @@ dotnet add package microsoft.aspnetcore.grpc.jsontranscoding
 dotnet add package microsoft.entityframeworkcore.design
 dotnet add package microsoft.entityframeworkcore.sqlite
 ```
+
+Update your ```appsettings.json``` with code below.<br/>
+Http1 calls you will need for api requests, http2 for gRPC ones.
+```json lines
+"Kestrel": {
+    "EndpointDefaults": {
+      "Protocols": "Http1AndHttp2"
+    }
+  }
+```
+
+After you have wired up the db in the ```Program.cs``` like this:<br/>
+```csharp
+builder.Services.AddDbContextPool<AppDbContext>(o => o.UseSqlite("Data Source=ToDoDatabase.db"));
+```
+don't forget to run the EF migration script to create the database:
+```shell
+dotnet ef migrations add InitialMigration
+dotnet ef database update
+```
