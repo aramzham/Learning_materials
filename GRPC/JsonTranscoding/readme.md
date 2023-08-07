@@ -37,3 +37,5 @@ When you add a new .proto file into your project, do not forget to add it in the
 ```xml
 <Protobuf Include="Protos\todo.proto" GrpcServices="Server" />
 ```
+
+In order to be able to use json transcoding, copy the ```annotations.proto``` and ```http.proto``` from <a href="https://learn.microsoft.com/en-us/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0">the link</a> and paste them into ```/google/api``` folder.

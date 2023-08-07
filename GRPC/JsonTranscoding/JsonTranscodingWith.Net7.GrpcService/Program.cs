@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddGrpc();
+builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddDbContextPool<AppDbContext>(o => o.UseSqlite("Data Source=ToDoDatabase.db"));
 
 var app = builder.Build();

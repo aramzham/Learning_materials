@@ -82,8 +82,8 @@ public class ToDoService : ToDoItService.ToDoItServiceBase
     {
         if (request.Id <= 0 || string.IsNullOrEmpty(request.Title))
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid input object"));
-        
-        var todoInDb = await  _dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+        var todoInDb = await _dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (todoInDb is null)
             throw new RpcException(new Status(StatusCode.NotFound, "Invalid input object"),
@@ -105,7 +105,7 @@ public class ToDoService : ToDoItService.ToDoItServiceBase
     {
         if (request.Id <= 0)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid input object"));
-        
+
         var todoInDb = await _dbContext.ToDoItems.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (todoInDb is null)

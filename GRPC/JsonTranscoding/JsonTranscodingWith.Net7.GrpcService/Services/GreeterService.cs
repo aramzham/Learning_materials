@@ -11,5 +11,5 @@ public class GreeterService : Greeter.GreeterBase
         {
             Message = $"Hello {request.Name}"
         });
-}
+    }
 }
