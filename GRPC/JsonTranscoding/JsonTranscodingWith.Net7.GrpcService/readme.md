@@ -32,3 +32,8 @@ don't forget to run the EF migration script to create the database:
 dotnet ef migrations add InitialMigration
 dotnet ef database update
 ```
+
+When you add a new .proto file into your project, do not forget to add it in the .csproj file as well.
+```xml
+<Protobuf Include="Protos\todo.proto" GrpcServices="Server" />
+```
