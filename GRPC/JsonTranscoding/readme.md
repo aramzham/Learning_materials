@@ -27,7 +27,7 @@ After you have wired up the db in the ```Program.cs``` like this:<br/>
 ```csharp
 builder.Services.AddDbContextPool<AppDbContext>(o => o.UseSqlite("Data Source=ToDoDatabase.db"));
 ```
-don't forget to run the EF migration script to create the database:
+run the EF migration script to create the database:
 ```shell
 dotnet ef migrations add InitialMigration
 dotnet ef database update
@@ -39,3 +39,7 @@ When you add a new .proto file into your project, do not forget to add it in the
 ```
 
 In order to be able to use json transcoding, copy the ```annotations.proto``` and ```http.proto``` from <a href="https://learn.microsoft.com/en-us/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0">the link</a> and paste them into ```/google/api``` folder.
+
+<hr>
+
+For more information check out this <a href="https://www.youtube.com/watch?v=Rqz9XiSqH3E">tutorial by Les Jackson</a>.
