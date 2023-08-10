@@ -10,6 +10,7 @@
         <None Include="Iteration.fsx" />
         <None Include="ConditionalExpressions.fsx" />
         <None Include="MatchExpressions.fsx" />
+        <None Include="Exceptions.fsx" />
     </ItemGroup>
 
 </Project>

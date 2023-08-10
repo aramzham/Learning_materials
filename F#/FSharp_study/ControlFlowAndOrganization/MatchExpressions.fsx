@@ -1,8 +1,8 @@
-﻿// let describe x =
-//     match x with
-//     | 0 -> "zero"
-//     | 1 -> "one"
-//     | _ -> "neither zero or one"
+﻿let describeMatch x =
+    match x with
+    | 0 -> "zero"
+    | 1 -> "one"
+    | _ -> "neither zero or one"
 
 let describe = function // same as match but without the single parameter
     | 0 -> "zero"
