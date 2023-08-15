@@ -1,0 +1,1 @@
+﻿printfn "%A" (Mathematics.add 1 2)
