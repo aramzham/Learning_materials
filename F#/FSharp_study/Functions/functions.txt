@@ -16,3 +16,6 @@ Infix functions has 2 arguments - one to its left, one to its right.
 F# is left associative regarding related to applying arguments to function parameters.
 square 3 + 1 = ???
 distance 2 7 * 2 = ???
+
+
+Currying is the conversion of a function that takes multiple arguments into a sequence of functions each taking a single argument.
