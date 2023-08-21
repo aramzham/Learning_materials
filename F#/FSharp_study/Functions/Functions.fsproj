@@ -11,6 +11,7 @@
         <None Include="PartialApplication.fsx" />
         <None Include="FunctionComposition.fsx" />
         <None Include="Pipelines.fsx" />
+        <None Include="Recursion.fsx" />
     </ItemGroup>
 
 </Project>

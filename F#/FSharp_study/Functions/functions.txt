@@ -19,3 +19,8 @@ distance 2 7 * 2 = ???
 
 
 Currying is the conversion of a function that takes multiple arguments into a sequence of functions each taking a single argument.
+
+
+1. A recursive function must know where to stop = Base case.
+2. Change state and get closer to base case.
+3. Calls itself.
