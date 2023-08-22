@@ -11,20 +11,20 @@ module UserConsole =
         Console.Write("Enter the amount of the transaction: ")
         Console.ReadLine() |> Decimal.Parse
         
-    let userLoop () =
-        let mutable balance = 0m
-    
-        let mutable isRunning = true
-        while isRunning do
+    let run () =
+        let rec loop balance =
             printfn $"balance: %f{balance}"
             
             let action = promptUser()
             printfn $"You told me to do this: %s{action}"
             
-            balance <-
-                match action with
-                | "d" -> balance + getAmount() 
-                | "w" -> balance - getAmount() 
+            match action with
+                | "d" -> loop (balance + getAmount()) 
+                | "w" -> loop (balance - getAmount())
+                | "x" -> ()
                 | _ ->
-                    isRunning <- action <> "x"
-                    balance
+                    printfn $"Invalid action: {action}"
+                    loop balance
+                    
+        loop 0m
+        ()

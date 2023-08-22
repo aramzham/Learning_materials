@@ -12,6 +12,7 @@
         <None Include="FunctionComposition.fsx" />
         <None Include="Pipelines.fsx" />
         <None Include="Recursion.fsx" />
+        <None Include="HigherOrderFunctions.fsx" />
     </ItemGroup>
 
 </Project>
