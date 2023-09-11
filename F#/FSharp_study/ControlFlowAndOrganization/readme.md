@@ -13,8 +13,8 @@ Order of the files in compilation is important in F#.
 
 Access control
 
-Access specifier | Effective access
------------------------------------
-public           | access by all callers (default)
-private          | only accessible from within the enclosing type or module
-internal         | only accessible from within the assembly
+| Access specifier  | Effective access  |
+|---|---|
+| public  | access by all callers (default)  |
+| private  | only accessible from within the enclosing type or module  |
+|  internal |  only accessible from within the assembly |
