@@ -12,15 +12,15 @@ You can use .Net's Console class for input/output.
 printfn adds a carriage return symbol at the end of the line, while printf doesn't.
 
 
-Format specifier | Meaning
-----------------------------
-%A				 | any value
-%s			     | String
-%c			     | Char
-%d, %i			 | decimal integer
-%f, %F			 | floating point
-%b			     | boolean => true or false
-%%			     | just a '%'
+|Format specifier| Meaning                 |
+|----------------|-------------------------|
+|%A				 | any value               |
+|%s			     | String                  |
+|%c			     | Char                    |
+|%d, %i			 | decimal integer         |
+|%f, %F			 | floating point          |
+|%b			     | boolean => true or false|
+|%%			     | just a '%'              |
 
 
 Variable is a user created label which is used to access a value somewhere in the application.
@@ -45,14 +45,14 @@ Strings are immutable in F# and are just alias for .net's System.String
 
 
 print/string formatting variations
-Function | Use
----------------
-printf   | output goes to stdout
-sprintf  | returns a formatted string
-eprintf  | output to stderr
-fprintf  | output to a text writer
-bprintf  | output to a StringBuilder
-kprintf  | calls a function to generate a result
+| Function | Use                                  |
+| ---------|--------------------------------------|
+| printf   | output goes to stdout                |
+| sprintf  | returns a formatted string           |
+| eprintf  | output to stderr                     |
+| fprintf  | output to a text writer              |
+| bprintf  | output to a StringBuilder            |
+| kprintf  | calls a function to generate a result|
 
 
 Unit is a type that indicates absence of a specific value.
