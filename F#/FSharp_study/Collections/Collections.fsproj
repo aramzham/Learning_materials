@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="DictsMapsSets.fsx" />
+    <None Include="Arrays.fsx" />
+    <None Include="Sequences.fsx" />
+    <None Include="ListModule.fsx" />
+    <None Include="readme.md" />
+    <None Include="Lists.fsx" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+</Project>

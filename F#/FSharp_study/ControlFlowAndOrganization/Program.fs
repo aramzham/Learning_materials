@@ -4,7 +4,7 @@
 let main argv =
     Console.WriteLine("Hello from the transaction processor!")
     
-    Transactions.Driver.UserConsole.run()
+    Transactions.Driver.AccountRepoDriver.run()
     
     Console.WriteLine("Bye!!")
     0 // must return something

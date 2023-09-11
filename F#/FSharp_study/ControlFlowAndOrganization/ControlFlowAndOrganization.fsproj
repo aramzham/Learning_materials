@@ -1,17 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
-    </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <Compile Include="Driver.fs" />
-        <Compile Include="Program.fs" />
-        <None Include="Iteration.fsx" />
-        <None Include="ConditionalExpressions.fsx" />
-        <None Include="MatchExpressions.fsx" />
-        <None Include="Exceptions.fsx" />
-    </ItemGroup>
+	<ItemGroup>
+		<Compile Include="Utils.fs" />
+		<Compile Include="Domain.fs" />
+		<Compile Include="Rules.fs" />
+		<Compile Include="Repo.fs" />
+		<Compile Include="Driver.fs" />
+		<Compile Include="Program.fs" />
+		<None Include="Iteration.fsx" />
+		<None Include="ConditionalExpressions.fsx" />
+		<None Include="MatchExpressions.fsx" />
+		<None Include="Exceptions.fsx" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="FSharp.SystemTextJson" Version="1.2.42" />
+	</ItemGroup>
 
 </Project>

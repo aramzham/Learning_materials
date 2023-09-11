@@ -1,19 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BasicTour", "BasicTour\BasicTour.fsproj", "{769899CF-F77E-43DF-A177-A44F33D44319}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "BasicTour", "BasicTour\BasicTour.fsproj", "{769899CF-F77E-43DF-A177-A44F33D44319}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Basics", "Basics\Basics.fsproj", "{E88E45F6-5D87-41E8-9004-3A9787A9B03F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Basics", "Basics\Basics.fsproj", "{E88E45F6-5D87-41E8-9004-3A9787A9B03F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ControlFlowAndOrganization", "ControlFlowAndOrganization\ControlFlowAndOrganization.fsproj", "{2BD94ABD-EE03-409F-AF06-DB5A57E29919}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ControlFlowAndOrganization", "ControlFlowAndOrganization\ControlFlowAndOrganization.fsproj", "{2BD94ABD-EE03-409F-AF06-DB5A57E29919}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Modules", "Modules\Modules.fsproj", "{03478A06-2887-4577-9CDE-ADFB1579AE8C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Modules", "Modules\Modules.fsproj", "{03478A06-2887-4577-9CDE-ADFB1579AE8C}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Namespaces", "Namespaces\Namespaces.fsproj", "{036131D2-B25C-4A89-A192-CA143AA55CE9}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Namespaces", "Namespaces\Namespaces.fsproj", "{036131D2-B25C-4A89-A192-CA143AA55CE9}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Functions", "Functions\Functions.fsproj", "{78EC6FD7-5022-4523-BA74-C9C549F52E7B}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Functions", "Functions\Functions.fsproj", "{78EC6FD7-5022-4523-BA74-C9C549F52E7B}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Types", "Types\Types.fsproj", "{F71E3D9C-CB6D-467F-A5CA-A4002835939B}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Options", "Options\Options.fsproj", "{8C5B8018-42BF-4DF4-A1F6-26255A303EFB}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Collections", "Collections\Collections.fsproj", "{B5EF5F51-F764-4799-B981-D5BA3A494C09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +51,18 @@ Global
 		{78EC6FD7-5022-4523-BA74-C9C549F52E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78EC6FD7-5022-4523-BA74-C9C549F52E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78EC6FD7-5022-4523-BA74-C9C549F52E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F71E3D9C-CB6D-467F-A5CA-A4002835939B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F71E3D9C-CB6D-467F-A5CA-A4002835939B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F71E3D9C-CB6D-467F-A5CA-A4002835939B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F71E3D9C-CB6D-467F-A5CA-A4002835939B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5B8018-42BF-4DF4-A1F6-26255A303EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5B8018-42BF-4DF4-A1F6-26255A303EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5B8018-42BF-4DF4-A1F6-26255A303EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5B8018-42BF-4DF4-A1F6-26255A303EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5EF5F51-F764-4799-B981-D5BA3A494C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5EF5F51-F764-4799-B981-D5BA3A494C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5EF5F51-F764-4799-B981-D5BA3A494C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5EF5F51-F764-4799-B981-D5BA3A494C09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

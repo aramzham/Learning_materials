@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="ObjectExpressions.fsx" />
+    <None Include="Interfaces.fsx" />
+    <Compile Include="Classes.fsx" />
+    <Compile Include="UnitsOfMeasure.fsx" />
+    <None Include="DiscriminatedUnions.fsx" />
+    <None Include="Records.fsx" />
+    <None Include="Tuples.fsx" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
