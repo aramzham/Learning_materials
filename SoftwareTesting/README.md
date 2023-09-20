@@ -7,6 +7,11 @@
   <li><a href="https://github.com/aramzham/Learning_materials/tree/main/SoftwareTesting/FluentValidation">Fluent validation</a></li>
 </ul>
 
+# Load testing
+<ul>
+  <li><a href="https://github.com/aramzham/Learning_materials/tree/main/SoftwareTesting/k6">k6</a></li>
+</ul>
+
 # End-to-end testing
 <ul>
   <li><a href="https://github.com/aramzham/Learning_materials/tree/main/SoftwareTesting/Cypress%20testing">Cypress testing</a></li>
