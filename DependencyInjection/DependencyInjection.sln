@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjectionContainer", "DependencyInjectionContainer\DependencyInjectionContainer.csproj", "{DBC67B72-19A6-44E7-A67D-7C761580084F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApp", "ConsumerApp\ConsumerApp.csproj", "{98CF182F-0A52-4DCD-9071-5A5A377E1E4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vax", "Vax\Vax.csproj", "{3FE09509-5988-4B63-9C92-96BAAFE5FEA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBC67B72-19A6-44E7-A67D-7C761580084F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC67B72-19A6-44E7-A67D-7C761580084F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC67B72-19A6-44E7-A67D-7C761580084F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC67B72-19A6-44E7-A67D-7C761580084F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CF182F-0A52-4DCD-9071-5A5A377E1E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CF182F-0A52-4DCD-9071-5A5A377E1E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CF182F-0A52-4DCD-9071-5A5A377E1E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CF182F-0A52-4DCD-9071-5A5A377E1E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE09509-5988-4B63-9C92-96BAAFE5FEA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE09509-5988-4B63-9C92-96BAAFE5FEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE09509-5988-4B63-9C92-96BAAFE5FEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE09509-5988-4B63-9C92-96BAAFE5FEA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
