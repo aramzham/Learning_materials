@@ -1,0 +1,35 @@
+﻿GET https://localhost:7282/hello
+
+###
+
+PATCH https://localhost:7282/world
+
+###
+
+OPTIONS https://localhost:7282/world
+
+###
+
+HEAD https://localhost:7282/world
+
+###
+
+GET https://localhost:7282/regex/some3_242
+
+###
+
+GET https://localhost:7282/length/five5
+
+###
+
+GET https://localhost:7282/point?point=2.59,1.94
+
+###
+
+GET https://localhost:7282/some-prop
+Authorization: VerySecret
+
+###
+
+GET https://localhost:7282/claims
+Authorization: VerySecret
