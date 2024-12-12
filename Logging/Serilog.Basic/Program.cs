@@ -6,3 +6,7 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 
 logger.Information("Hello, World!");
+
+Log.Logger = logger;
+
+await Log.CloseAndFlushAsync();
