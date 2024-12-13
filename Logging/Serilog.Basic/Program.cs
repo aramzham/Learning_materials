@@ -7,7 +7,9 @@ using SerilogTimings.Extensions;
 
 var logger = new LoggerConfiguration()
     // .WriteTo.Console(new JsonFormatter())
-    .WriteTo.Console()
+    // .WriteTo.Console()
+    // .WriteTo.Async(a => a.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Sixteen), 10)
+    .WriteTo.Sink<MySink>()
     .WriteTo.File("log.txt")
     .Enrich.FromLogContext() // to enrich the log context with the properties we want to expose
     //.Destructure.ByTransforming<Payment>(p => new { p.Amount, p.PaymentType }) // to omit the properties we don't want to expose
@@ -21,9 +23,9 @@ Log.Logger = logger;
 var payment = new Payment()
 {
     Id = Guid.NewGuid(),
-    PaymentType = 2, 
-    Amount = 300m, 
-    OccuredAt = DateTime.UnixEpoch, 
+    PaymentType = 2,
+    Amount = 300m,
+    OccuredAt = DateTime.UnixEpoch,
     Email = "many@men.us",
     Description = "lorem ipsum",
     CardNumber = "23424234280942"
