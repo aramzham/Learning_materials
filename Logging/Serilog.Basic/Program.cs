@@ -1,9 +1,12 @@
 ﻿using Serilog;
 using Serilog.Basic;
+using Serilog.Context;
+using Serilog.Formatting.Json;
 
 var logger = new LoggerConfiguration()
-    .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
+    .WriteTo.Console(new JsonFormatter())
     .WriteTo.File("log.txt")
+    .Enrich.FromLogContext() // to enrich the log context with the properties we want to expose
     .Destructure.ByTransforming<Payment>(p => new { p.Amount, p.PaymentType }) // to omit the properties we don't want to expose
     .CreateLogger();
 
@@ -20,11 +23,15 @@ var dict = new Dictionary<int, string>()
 };
 
 logger.Information("Serilog configured");
-// structured logging
-logger.Information("Payment data = {@Payment}", payment);
-// dictionary will automatically be structure => no need for @ sign
-logger.Information("Dictionary data = {Dictionary}", dict);
-// to print out the type of dictionary use $ sign
-logger.Information("Dictionary data = {$Dictionary}", dict);
+
+using (LogContext.PushProperty("Time", TimeOnly.FromDateTime(DateTime.Now)))
+{
+    // structured logging
+    logger.Information("Payment data = {@Payment}", payment);
+    // dictionary will automatically be structure => no need for @ sign
+    logger.Information("Dictionary data = {Dictionary}", dict);
+    // to print out the type of dictionary use $ sign
+    logger.Information("Dictionary data = {$Dictionary}", dict);
+}
 
 await Log.CloseAndFlushAsync();
