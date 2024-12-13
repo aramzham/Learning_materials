@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Destructurama;
+using Serilog;
 using Serilog.Basic;
 using Serilog.Context;
 using Serilog.Formatting.Json;
@@ -9,15 +10,24 @@ var logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("log.txt")
     .Enrich.FromLogContext() // to enrich the log context with the properties we want to expose
-    .Destructure
-    .ByTransforming<Payment>(p => new { p.Amount, p.PaymentType }) // to omit the properties we don't want to expose
+    //.Destructure.ByTransforming<Payment>(p => new { p.Amount, p.PaymentType }) // to omit the properties we don't want to expose
+    .Destructure.UsingAttributes()
     .CreateLogger();
 
 logger.Information("Hello, World!");
 
 Log.Logger = logger;
 
-var payment = new Payment() { PaymentType = 2, Amount = 300m, OccuredAt = DateTime.UnixEpoch, Id = Guid.NewGuid() };
+var payment = new Payment()
+{
+    Id = Guid.NewGuid(),
+    PaymentType = 2, 
+    Amount = 300m, 
+    OccuredAt = DateTime.UnixEpoch, 
+    Email = "many@men.us",
+    Description = "lorem ipsum",
+    CardNumber = "23424234280942"
+};
 var dict = new Dictionary<int, string>()
 {
     { 1, "One" },
@@ -46,7 +56,7 @@ using (logger.TimeOperation("the payment with id {PaymentId} has been processed"
 var operation = logger.BeginOperation("the payment with id {PaymentId} has been processed", payment.Id);
 try
 {
-    logger.Information("Processing payment");
+    logger.Information("Processing payment {@Payment}", payment);
     Thread.Sleep(1000);
 }
 finally
