@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Basic", "Serilog.Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.FromConfigFile", "Serilog.FromConfigFile\Serilog.FromConfigFile.csproj", "{FCA95B32-E977-4C79-90FE-628AB62942C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.HighPerformance", "Logging.HighPerformance\Logging.HighPerformance.csproj", "{9E42A2F1-FE48-4F44-B774-8DF8F1726C6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{FCA95B32-E977-4C79-90FE-628AB62942C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA95B32-E977-4C79-90FE-628AB62942C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA95B32-E977-4C79-90FE-628AB62942C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E42A2F1-FE48-4F44-B774-8DF8F1726C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E42A2F1-FE48-4F44-B774-8DF8F1726C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E42A2F1-FE48-4F44-B774-8DF8F1726C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E42A2F1-FE48-4F44-B774-8DF8F1726C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
