@@ -20,7 +20,7 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
             .WithUsername("workshop")
             .WithPassword("changeme")
             .Build();
-    private readonly GitHubApiServer _gitHubApiServer = new ();
+    private readonly GitHubApiServer _gitHubApiServer = new();
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
