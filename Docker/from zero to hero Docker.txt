@@ -66,3 +66,17 @@ if you don't specify -f parameter it will look for the Dockerfile in the current
 we can also specify an image name and a tag "docker build -f .\DockerCourseApi\Dockerfile -t api:v1 ."
 
 we need the dotnet sdk to run restore and publish commands
+
+dockerfile starts with FROM which will specify the base image
+
+WORKDIR /src - gets or creates a directory src inside the container and that becomes the current directory
+
+COPY ["DockerCourseApi/DockerCourseApi.csproj", "DockerCourseApi/"] - this will copy the .csproj file to a src's subdirectory called DockerCourseApi
+
+.csproj file is like packages.json for node
+
+if we don't change the .csproj file and run docker build => it won't run that layer again, will use the cache
+
+COPY . . - copies everything to matching folder
+
+you'd not want in production to have full .net sdk with your application => you'd go with more lightweight solution like mcr.microsoft.com/dotnet/aspnet:9.0 (runtime dotnet base image)
