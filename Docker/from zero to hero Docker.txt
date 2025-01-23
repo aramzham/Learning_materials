@@ -1,0 +1,68 @@
+Install docker desktop with wsl 2 enabled instead of Hyper-V
+turn on WSL support in turn Windwos features on or of menu
+
+a container basically runs a single piece of software (like redis, RabbitMQ etc.)
+
+unlike VMs which have their own OS, containers share the machine's OS are much more lightweight
+
+a container is an instance of an image
+image is the template to create containers
+
+dockerhub is not the only image registry, azure, aws, google, GitHub, harbor have their own ones
+
+if you run "docker run nginx" and you don't have that image on your machine, docker will first pull the image and then run a container
+
+docker ps - list the containers
+
+docker stop {id} - stop but not delete the container
+
+docker ps -a - list the containers including the stopped ones
+
+docker rm {id} - remove the container completely
+
+docker run -p 80:80 nginx - publishes the container's port to the host, the number left from the colon is the port that we gonna access the container from outside world, the number on the right is the port that the software inside the container listens to (nginx by default sits at port 80) 
+
+you can specify multiple -p parameters
+docker run -p 5672:5672 -p 15672:15672 RabbitMQ:3-management
+
+if you have a container with id 933aa0673159 you can specify only first few characters to work with it like
+docker rm -f 933 - remove forcefully the running container
+
+docker run -d nginx - run the container in detached mode, like fire and forget, runs in the background, doesn't occupy the terminal
+
+docker logs {id} - get latest logs
+docker logs -f {id} - follow the logs in the current terminal window
+
+docker attach {id} - to reattach terminal to the specified container
+
+docker exec -it {id} {command} - execute a command inside the terminal like "docker exec -it a6b ls" or "docker exec -it a6b bash" and have fun inside the container
+
+docker commit {id} {image_name} - create an image from existing container
+
+rabbitmq:3-management - to the left of the colon is the image name, on the right is the tag, if you don't specify the tag it defaults to latest
+
+rabbitmq versions with -management are those with user interface, without -management are more lightweight versions without GUI
+
+tags must be immutable and always point to the same image, if not they will lead to confusions
+
+docker rmi {image_name}:{tag_name} - will untag the image
+docker rmi {image_name} - will remove the entire image
+
+docker pull nginx - download nginx image
+
+an image consists of different layers that are based on top of base image
+- container layer
+- image layer		|
+- image layer		|\readonly
+- image layer		|/
+- base image layer	|
+
+if 2 images use Debian base image, the latter won't be downloaded twice
+
+dockerfile is a list of instructions to create an image
+
+docker build . - path defines the build context directory, this copies everything from the path ignoring everything specified in the .dockerignore file, creates a zip/tar file and sends it to docker daemon
+if you don't specify -f parameter it will look for the Dockerfile in the current directory, but you can also do "docker build -f .\DockerCourseApi\Dockerfile ."
+we can also specify an image name and a tag "docker build -f .\DockerCourseApi\Dockerfile -t api:v1 ."
+
+we need the dotnet sdk to run restore and publish commands
