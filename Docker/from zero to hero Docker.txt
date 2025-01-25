@@ -80,3 +80,27 @@ if we don't change the .csproj file and run docker build => it won't run that la
 COPY . . - copies everything to matching folder
 
 you'd not want in production to have full .net sdk with your application => you'd go with more lightweight solution like mcr.microsoft.com/dotnet/aspnet:9.0 (runtime dotnet base image)
+
+instead of running a whole bunch of docker run commands one for backend, one for db, one for frontend, you can run docker compose from docker-compose file
+
+docker compose up - spins up all the containers specified in the file
+
+docker compose up -d - for detached run
+
+docker compose ps - listing all the containers in the docker compose
+
+docker compose logs - show all container logs
+
+docker compose logs {service_name} - see logs from only 1 service, service_name comes from .yaml file
+
+docker compose down - removes all the created containers
+
+docker compose build - build all the specified images
+
+docker compose up --build - build before running (in case you've made some changes in code)
+
+each id provided in docker-compose file is a dns entry
+
+context path in docker-compose is relative to docker-compose.yml file
+
+if you have a service that needs to be run after a specific one, use depends_on:[something]
