@@ -1,10 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["DockerCourseApi/DockerCourseApi.csproj", "DockerCourseApi/"]
-RUN dotnet restore "DockerCourseApi/DockerCourseApi.csproj"
+COPY ["DockerCourseApi.csproj", "./"]
+RUN dotnet restore
 COPY . .
-WORKDIR "/src/DockerCourseApi"
-RUN dotnet publish "DockerCourseApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app

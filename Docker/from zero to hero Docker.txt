@@ -104,3 +104,7 @@ each id provided in docker-compose file is a dns entry
 context path in docker-compose is relative to docker-compose.yml file
 
 if you have a service that needs to be run after a specific one, use depends_on:[something]
+
+your CI/CD will create an image and push it to container registry (like dockerhub), Kubernetes will pull the image and create containers
+
+you can either push a docker image or a group of images with docker compose push
