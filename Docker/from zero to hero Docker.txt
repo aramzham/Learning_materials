@@ -108,3 +108,26 @@ if you have a service that needs to be run after a specific one, use depends_on:
 your CI/CD will create an image and push it to container registry (like dockerhub), Kubernetes will pull the image and create containers
 
 you can either push a docker image or a group of images with docker compose push
+
+docker compose run database-seed - run the database seed
+docker compose run database database-seed - run both the db and db seed
+
+docker build -f .\DockerCourseApi\Dockerfile --network host . - if you see localhost => then treat it like the local network of container environment
+
+if you remove a container its data will be lost
+to address that you can create a volume(a piece of memory on hard drive) and make the container to point to it
+then if you remove the container and spin up a new one, the new one can use the same volume and preserve the data
+
+2 containers can point to same volume at the same time (maybe for some configurations)
+
+besides volumes you have bind mount (host file system), tmpfs (host memory)
+
+docker volume create {name} - create a volume
+
+docker volume ls - list volumes
+
+docker volume inspect dometrain - see details
+
+docker volume rm {name} - remove volume
+
+docker run ... -v sqldb-data:/var/opt/mssql - left of semicolon is path outside of container, on the right - inside the container
