@@ -3,6 +3,8 @@ WORKDIR /src
 COPY ["DockerCourseApi.csproj", "./"]
 RUN dotnet restore
 COPY . .
+#RUN dotnet build "DockerCourseApi/DockerCourseApi.csproj" -c Release -o /app/build
+#RUN dotnet test "DockerCourseApi.Tests/DockerCourseApi.Tests.csproj"
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
