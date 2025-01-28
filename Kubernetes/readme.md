@@ -25,3 +25,12 @@ if kubectl is not installed with docker desktop, install it with `https://kubern
 run "notepad $profile" and add a line "set-alias k kubectl" not to type kubectl all the time
 
 k get ns - get namespaces
+
+How to install k9s?
+- go to `https://github.com/derailed/k9s/releases`
+- download `k9s_Windows_amd64.zip` from latest release
+- add k9s to path
+  - Press Win + R, type sysdm.cpl, and press Enter.
+  - Go to the Advanced tab and click Environment Variables.
+  - Under System variables, find the Path variable and click Edit.
+  - Click New and add the path to the directory containing k9s.exe (e.g., C:\Program Files\k9s).
