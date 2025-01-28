@@ -131,3 +131,41 @@ docker volume inspect dometrain - see details
 docker volume rm {name} - remove volume
 
 docker run ... -v sqldb-data:/var/opt/mssql - left of semicolon is path outside of container, on the right - inside the container
+
+docker compose down -v - removes the containers alongside with volumes
+
+docker network ls - get list of networks
+
+docker network inspect {name} - explain the network
+
+two containers in same network can talk to each other
+
+bridge is the default network
+
+docker network create {name} - create a network
+
+different networks have different subnets => containers will have different ips
+
+docker run --rm ... - means that when you close the shell the container will go away
+
+docker run --network network-a alpine - create alpine container and attach it to network-a
+
+container id is a dns entry in a custom network not in default bridge
+
+docker network connect network-a container-b1 - connect container-b1 to network-a
+
+docker run -it --rm --name container-a2 --network network-a --hostname dometrain alpine - specify hostname for the container (you can now "ping dometrain" by hostname) 
+
+docker network disconnect network-a container-b1 - disconnect container-b1 from network-a
+
+docker compose uses bridge network, ids become dns entries
+
+in the same network all ports are available for the container to each other
+
+use latest images for better security
+
+container shares kernel with host (with OS), there's no VM
+
+entrypoint ["echo", "hello"]
+cmd ["world"] - cmd provides a default value when you run "docker run container_name" it will produce hello world
+if you run "docker run container_name dometrain" you will get hello dometrain
