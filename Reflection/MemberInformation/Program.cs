@@ -1,6 +1,8 @@
-﻿var type = typeof(OurExampleType);
+﻿using System.Reflection;
 
-var constructors = type.GetConstructors();
+var type = typeof(OurExampleType);
+
+var constructors = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 Console.WriteLine($"There are {constructors.Length} constructors.");
 foreach (var constructor in constructors)
 {
@@ -14,7 +16,7 @@ foreach (var eventInfo in events)
     Console.WriteLine($"\tEvent: {eventInfo}");
 }
 
-var properties = type.GetProperties();
+var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 Console.WriteLine($"There are {properties.Length} properties.");
 foreach (var property in properties)
 {
@@ -24,14 +26,22 @@ foreach (var property in properties)
 properties.Where(x => x is { CanRead: true, CanWrite: true }).ToList().ForEach(x => Console.WriteLine($"\t\tProperty with getter and setter: {x}"));
 properties.Where(x => x is { CanRead: true, CanWrite: false }).ToList().ForEach(x => Console.WriteLine($"\t\tProperty with getter only: {x}"));
 
+
+// Get all methods including inherited ones
 var methods = type.GetMethods();
+
+// Print the total count
 Console.WriteLine($"There are {methods.Length} methods.");
+
+// Print details for each method
 foreach (var method in methods)
 {
-    Console.WriteLine($"\tMethod: {method}");
+    var accessibility = method.IsPublic ? "public" : "private";
+    var isStatic = method.IsStatic ? "static " : "";
+    Console.WriteLine($"\tMethod: {accessibility} {isStatic}{method.Name}");
 }
 
-var fields = type.GetFields();
+var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 Console.WriteLine($"There are {fields.Length} fields.");
 foreach (var field in fields)
 {
@@ -47,11 +57,18 @@ public sealed class OurExampleType
     {
         _someField = someField;
     }
-    
+
+    private OurExampleType()
+    {
+        Console.WriteLine("This constructor is private.");
+    }
+
+    public static int StaticProperty { get; set; }
+
     public event EventHandler? SomeEvent;
     
     public string? SomeProperty { get; set; }
-    public int AnotherProperty { get; }
+    private int PrivateProperty { get; }
 
     public void DoSomething()
     {
