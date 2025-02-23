@@ -34,3 +34,7 @@ How to install k9s?
   - Go to the Advanced tab and click Environment Variables.
   - Under System variables, find the Path variable and click Edit.
   - Click New and add the path to the directory containing k9s.exe (e.g., C:\Program Files\k9s).
+
+k apply -f {path_to_file} - apply a yaml file
+
+k rollout undo deployment/{deployment_name} - if you have messed up with your deployment you can rollback with this command
