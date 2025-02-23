@@ -28,7 +28,7 @@ properties.Where(x => x is { CanRead: true, CanWrite: false }).ToList().ForEach(
 
 
 // Get all methods including inherited ones
-var methods = type.GetMethods();
+var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
 // Print the total count
 Console.WriteLine($"There are {methods.Length} methods.");
@@ -51,6 +51,8 @@ foreach (var field in fields)
 
 public sealed class OurExampleType
 {
+    public static string _StaticField;
+    
     private readonly int _someField;
 
     public OurExampleType(int someField)
@@ -70,6 +72,10 @@ public sealed class OurExampleType
     public string? SomeProperty { get; set; }
     private int PrivateProperty { get; }
 
+    private static  void PrivateStaticMethod()
+    {
+    }
+    
     public void DoSomething()
     {
     }
