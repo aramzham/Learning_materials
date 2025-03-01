@@ -57,3 +57,6 @@ foreach (var type in genericTypes)
         }
     }
 }
+
+var genericMethods = new CallingGenericMethods();
+genericMethods.Invoke();
