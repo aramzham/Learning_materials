@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿namespace Getting_started.Web;
 
-namespace Getting_started;
-
-public class Worker(ILogger<Worker> logger) : BackgroundService
+public class Worker(ILogger<Worker> logger, IConfiguration config) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -19,8 +16,11 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
             {
                 logger.LogWarning("seeing this roughly 30% of the time...");
             }
+
+            // var delay = TimeSpan.Parse(config["Delay"] ?? "00:00:03");
+            var delay = config.GetValue<TimeSpan>(key: "Delay", defaultValue: TimeSpan.FromSeconds(3));
             
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(delay, stoppingToken);
         }
     }
 }
