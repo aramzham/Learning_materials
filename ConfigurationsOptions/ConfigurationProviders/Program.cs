@@ -46,4 +46,11 @@ builder.Configuration.AddUserSecrets<Program>(
     reloadOnChange: true
     );
 
+// environment variables ($env)
+
+// builder.Configuration.AddEnvironmentVariables();
+// many .net specific variables are automatically pulled in from the Microsoft.Extensions.Hosting meta-package defaults. Such as, but not limited to, the "DOTNET_*" prefixed env vars.
+
+builder.Configuration.AddEnvironmentVariables(prefix: "MYAPP_");
+
 Console.WriteLine(builder.Configuration.GetDebugView());
