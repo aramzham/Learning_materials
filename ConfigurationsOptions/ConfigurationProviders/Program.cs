@@ -53,4 +53,24 @@ builder.Configuration.AddUserSecrets<Program>(
 
 builder.Configuration.AddEnvironmentVariables(prefix: "MYAPP_");
 
+// command-line args (-a)
+// Microsoft.Extensions.Configuration.CommandLine
+
+var switchMappings = new Dictionary<string, string>()
+{
+    // -a="something" or -a "something"
+    ["-d"] = "MyApp:MyKey",
+    // --apiOn=true /apiOn=true
+    ["--apiOn"] = "TodoApiOptions:Enabled",
+    // --todoUri <uri> /todoUri <uri>
+    ["--todoUri"] = "TodoApiOptions:BaseAddress"
+};
+
+builder.Configuration.AddCommandLine(args, switchMappings);
+
+// key-per file (/key)
+// Microsoft.Extensions.Configuration.KeyPerFile
+
+builder.Configuration.AddKeyPerFile(directoryPath: @"C:\Users\Aram\source\repos\Learning_materials\ConfigurationsOptions\ConfigurationProviders\key_per_file", optional: true);
+
 Console.WriteLine(builder.Configuration.GetDebugView());
