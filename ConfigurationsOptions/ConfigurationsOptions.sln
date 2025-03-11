@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Getting-started.Web", "Gett
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationProviders", "ConfigurationProviders\ConfigurationProviders.csproj", "{8A956CB8-5C13-46BC-954C-9BEF3BC681BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.Yaml", "Configuration.Yaml\Configuration.Yaml.csproj", "{5E2121B3-9501-4F2D-AB90-2DCC099A289E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{8A956CB8-5C13-46BC-954C-9BEF3BC681BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A956CB8-5C13-46BC-954C-9BEF3BC681BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A956CB8-5C13-46BC-954C-9BEF3BC681BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E2121B3-9501-4F2D-AB90-2DCC099A289E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E2121B3-9501-4F2D-AB90-2DCC099A289E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E2121B3-9501-4F2D-AB90-2DCC099A289E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E2121B3-9501-4F2D-AB90-2DCC099A289E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Configuration.Yaml;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateEmptyApplicationBuilder(null);
@@ -72,5 +73,16 @@ builder.Configuration.AddCommandLine(args, switchMappings);
 // Microsoft.Extensions.Configuration.KeyPerFile
 
 builder.Configuration.AddKeyPerFile(directoryPath: @"C:\Users\Aram\source\repos\Learning_materials\ConfigurationsOptions\ConfigurationProviders\key_per_file", optional: true);
+
+// custom implementation of yaml configuration source and provider
+
+builder.Configuration.AddYamlFile(
+    path: "app.yaml",
+    optional: true,
+    reloadOnChange: true);
+builder.Configuration.AddYamlFile(
+    path: $"app.{builder.Environment.EnvironmentName}.yaml",
+    optional: false,
+    reloadOnChange: true);
 
 Console.WriteLine(builder.Configuration.GetDebugView());

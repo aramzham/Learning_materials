@@ -1,0 +1,11 @@
+﻿Logging:
+  LogLevel: debug
+  LogFormat: text
+  LogFilePath: /var/log/traefik.log
+  LogRotate: true
+  LogRotateMaxAge: 30
+  LogRotateMaxSize: 10
+  LogRotateMaxBackups: 5
+  LogRotateLocalTime: true
+  LogRotateCompress: true
+Delay: '0:0:03'
