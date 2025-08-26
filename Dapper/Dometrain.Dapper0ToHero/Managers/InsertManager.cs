@@ -18,4 +18,17 @@ public class InsertManager
         var id = await connection.ExecuteScalarAsync<int>(sql, employee);
         return id;
     }
+    
+    public async Task<int> InsertEmployeesAsync(IEnumerable<Employee> employees)
+    {
+        await using var connection = new SqliteConnection("Data Source=database.db");
+        await connection.OpenAsync();
+        const string sql = """
+                           INSERT INTO Employees (FirstName, LastName, Email, HireDate, DepartmentID) 
+                           VALUES (@FirstName, @LastName, @Email, @HireDate, @DepartmentID);
+                            select last_insert_rowid();
+                           """;
+        var numberOfRowsAffected = await connection.ExecuteAsync(sql, employees);
+        return numberOfRowsAffected;
+    }
 }
