@@ -8,4 +8,9 @@ public class Employee
     public string? Email { get; set; }
     public string? HireDate { get; set; }
     public int? DepartmentID { get; set; }
+
+    public override string ToString()
+    {
+        return $"EmployeeID: {EmployeeID}, FirstName: {FirstName}, LastName: {LastName}, Email: {Email}, HireDate: {HireDate}, DepartmentID: {DepartmentID}";
+    }
 }

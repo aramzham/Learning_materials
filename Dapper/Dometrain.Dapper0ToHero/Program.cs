@@ -37,3 +37,27 @@ var insertManager = new InsertManager();
 // ];
 // var rows = await insertManager.InsertEmployeesAsync(employees);
 // Console.WriteLine($"inserted row count = {rows}");
+
+var queryManager = new QueryManager();
+// var departmentsCount = await queryManager.DepartmentsCount();
+// Console.WriteLine($"departments count = {departmentsCount}");
+//
+// var lastName = await queryManager.GetEmployeeLastName(3);
+// Console.WriteLine($"employee last name = {lastName}");
+//
+// var employee = await queryManager.GetEmployeeById(4);
+// Console.WriteLine($"employee = {employee}");
+//
+// var operationsEmployees = await queryManager.GetEmployeesByDepartmentId(9);
+// Console.WriteLine($"in operations department we have:{Environment.NewLine}");
+// foreach (var e in operationsEmployees)
+// {
+//     Console.WriteLine($"employee = {e}");
+// }
+
+var deleteManager = new DeleteManager();
+var deletedRow = await deleteManager.DeleteByIdAsync(12);
+Console.WriteLine($"deleted row count = {deletedRow}");
+
+var deletedRows = await deleteManager.DeleteByIdGroup([11,12,13]);
+Console.WriteLine($"deleted row count = {deletedRows}");
