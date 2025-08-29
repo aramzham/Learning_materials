@@ -41,4 +41,23 @@ public class QueryManager
         var employees = await connection.QueryAsync<Employee>(sql, new { departmentId });
         return employees.ToList();
     }
+    
+    public async IAsyncEnumerable<Employee> GetEmployeesByDepartmentIdUsingReader(int departmentId)
+    {
+        await using var connection = new SqliteConnection("Data Source=database.db");
+        await connection.OpenAsync();
+        const string sql = """
+                           SELECT EmployeeID, FirstName as Name, Email FROM Employees where DepartmentID = @departmentId
+                           """;
+        await using var reader = await connection.ExecuteReaderAsync(sql, new { departmentId });
+        while (await reader.ReadAsync())
+        {
+            yield return new Employee
+            {
+                EmployeeID = reader.GetInt32(0),
+                FirstName = reader.GetString(reader.GetOrdinal("Name")),
+                Email = await reader.IsDBNullAsync(2) ? null : reader.GetString(2)
+            };
+        }
+    }
 }

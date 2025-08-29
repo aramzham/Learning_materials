@@ -56,8 +56,15 @@ var queryManager = new QueryManager();
 // }
 
 var deleteManager = new DeleteManager();
-var deletedRow = await deleteManager.DeleteByIdAsync(12);
-Console.WriteLine($"deleted row count = {deletedRow}");
+// var deletedRow = await deleteManager.DeleteByIdAsync(12);
+// Console.WriteLine($"deleted row count = {deletedRow}");
+//
+// var deletedRows = await deleteManager.DeleteByIdGroup([11,12,13]);
+// Console.WriteLine($"deleted row count = {deletedRows}");
 
-var deletedRows = await deleteManager.DeleteByIdGroup([11,12,13]);
-Console.WriteLine($"deleted row count = {deletedRows}");
+var employeesByDepartmentId = await queryManager.GetEmployeesByDepartmentId(9);
+Console.WriteLine($"in operations department we have:{Environment.NewLine}");
+foreach (var e in employeesByDepartmentId)
+{
+    Console.WriteLine($"employee = {e.EmployeeID} {e.FirstName} {e.Email}");
+}
