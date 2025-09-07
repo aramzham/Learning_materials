@@ -1,70 +1,104 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+using Dometrain.Dapper0ToHero;
 using Dometrain.Dapper0ToHero.Entities;
 using Dometrain.Dapper0ToHero.Managers;
+using Z.Dapper.Plus;
 
-Console.WriteLine("Hello, World!");
+await DatabaseInitializer.InitializeAsync();
 
-var insertManager = new InsertManager();
-// var id = await insertManager.InsertEmployeeAsync(new Employee()
+var relationshipManager = new RelationshipManager();
+// var department = await relationshipManager.GetDepartmentWithEmployees(1);
+//
+// Console.WriteLine($"Department: {department?.Name}");
+// Console.WriteLine($"Employees: {department?.Employees.Count}");
+
+DapperPlusManager.Entity<Employee>().Table("Employees").Identity(x => x.EmployeeID)
+    .UseBulkOptions(x => x.IgnoreOnMergeUpdateExpression = employee => new {employee.LastName}); // change the first name but ignore last name change
+var bulkManager = new BulkManager();
+// var bulkEmployees = new List<Employee>()
 // {
-//     FirstName = "John",
-//     LastName = "Doe",
-//     Email = "john.doe@example.com",
-//     HireDate = "2020-09-19",
-//     DepartmentID = 10
-// });
-// Console.WriteLine($"inserted id = {id}");
-
-// List<Employee> employees =
-// [
-//     new()
+//     new Employee()
 //     {
-//         FirstName = "Johnny",
-//         LastName = "Walker",
-//         Email = "johnny.walker@example.com",
-//         HireDate = "2020-09-20",
-//         DepartmentID = 9
+//         FirstName = "Miley",
+//         LastName = "Cyrus",
+//         DepartmentID = 1,
+//         Email = "m.circus@mail.ru",
+//         HireDate = "2020-08-10"
 //     },
-//     new()
+//     new Employee()
 //     {
-//         FirstName = "Karen",
-//         LastName = "Abazyan",
-//         Email = "abaz@example.com",
-//         HireDate = "2020-09-21",
-//         DepartmentID = 8
+//         FirstName = "John",
+//         LastName = "Doe",
+//         DepartmentID = 2,
+//         Email = "XXXXXXXXXXXXXXXX",
+//         HireDate = "2020-08-10"
+//     },
+//     new Employee()
+//     {
+//         FirstName = "Jane",
+//         LastName = "Doe",
+//         DepartmentID = 3,
+//         Email = "XXXXXXXXXXXXXXXX",
+//         HireDate = "2020-08-10"
 //     }
-// ];
-// var rows = await insertManager.InsertEmployeesAsync(employees);
-// Console.WriteLine($"inserted row count = {rows}");
+// };
+
+// await bulkManager.BulkInsertAsync(employees: bulkEmployees);
 
 var queryManager = new QueryManager();
-// var departmentsCount = await queryManager.DepartmentsCount();
-// Console.WriteLine($"departments count = {departmentsCount}");
-//
-// var lastName = await queryManager.GetEmployeeLastName(3);
-// Console.WriteLine($"employee last name = {lastName}");
-//
-// var employee = await queryManager.GetEmployeeById(4);
-// Console.WriteLine($"employee = {employee}");
-//
-// var operationsEmployees = await queryManager.GetEmployeesByDepartmentId(9);
-// Console.WriteLine($"in operations department we have:{Environment.NewLine}");
-// foreach (var e in operationsEmployees)
+// var employees = await queryManager.GetEmployeesByDepartmentId(1);
+// foreach (var employee in employees)
 // {
-//     Console.WriteLine($"employee = {e}");
+//     employee.FirstName += " updated";
 // }
+// await bulkManager.BulkUpdateAsync(employees);
 
-var deleteManager = new DeleteManager();
-// var deletedRow = await deleteManager.DeleteByIdAsync(12);
-// Console.WriteLine($"deleted row count = {deletedRow}");
+// var upsertList = new List<Employee>()
+// {
+//     new Employee()
+//     {
+//         FirstName = "Miley",
+//         LastName = "Cyrus",
+//         DepartmentID = 1,
+//         Email = "XXXXXXXXXXXXXXXX",
+//         HireDate = "2020-08-10",
+//         EmployeeID = 1
+//     },
+//     new Employee()
+//     {
+//         FirstName = "Darron",
+//         LastName = "Aranowski",
+//         DepartmentID = 2,
+//         Email = "d.arno@toon.expo",
+//         HireDate = "1915-08-10",
+//         EmployeeID = 2
+//     },
+//     new Employee()
+//     {
+//         FirstName = "Another",
+//         LastName = "One inserted",
+//         DepartmentID = 3,
+//         Email = "inserted@another.one",
+//         HireDate = "2020-08-10"
+//     }
+// };
 //
-// var deletedRows = await deleteManager.DeleteByIdGroup([11,12,13]);
-// Console.WriteLine($"deleted row count = {deletedRows}");
+// await bulkManager.BulkMergeAsync(upsertList);
 
-var employeesByDepartmentId = await queryManager.GetEmployeesByDepartmentId(9);
-Console.WriteLine($"in operations department we have:{Environment.NewLine}");
-foreach (var e in employeesByDepartmentId)
-{
-    Console.WriteLine($"employee = {e.EmployeeID} {e.FirstName} {e.Email}");
-}
+// var deleteList = new List<Employee>()
+// {
+//     new Employee()
+//     {
+//         EmployeeID = 1
+//     },
+//     new Employee()
+//     {
+//         FirstName = "Darron",
+//         LastName = "Aranowski",
+//         DepartmentID = 2,
+//         Email = "d.arno@toon.expo",
+//         HireDate = "1915-08-10",
+//         EmployeeID = 13
+//     }
+// };
+//
+// await bulkManager.BulkDeleteAsync(deleteList);

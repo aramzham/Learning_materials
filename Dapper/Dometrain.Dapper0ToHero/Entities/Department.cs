@@ -8,4 +8,6 @@ public class Department
     public decimal? Budget { get; set; }
     public DateTime? CreatedAt { get; set; }
     public int? IsActive { get; set; }
+
+    public List<Employee> Employees { get; set; } = [];
 }
