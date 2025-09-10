@@ -102,3 +102,11 @@ var queryManager = new QueryManager();
 // };
 //
 // await bulkManager.BulkDeleteAsync(deleteList);
+
+// Temporary table example
+var tempTableManager = new TempTableManager();
+var highPerformers = await tempTableManager.GetHighPerformingEmployees();
+foreach (var emp in highPerformers)
+{
+    Console.WriteLine($"{emp.FirstName} {emp.LastName} - Dept: {emp.DepartmentID}");
+}
