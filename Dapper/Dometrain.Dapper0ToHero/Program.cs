@@ -105,8 +105,11 @@ var queryManager = new QueryManager();
 
 // Temporary table example
 var tempTableManager = new TempTableManager();
-var highPerformers = await tempTableManager.GetHighPerformingEmployees();
-foreach (var emp in highPerformers)
-{
-    Console.WriteLine($"{emp.FirstName} {emp.LastName} - Dept: {emp.DepartmentID}");
-}
+// var highPerformers = await tempTableManager.GetHighPerformingEmployees();
+// foreach (var emp in highPerformers)
+// {
+//     Console.WriteLine($"{emp.FirstName} {emp.LastName} - Dept: {emp.DepartmentID}");
+// }
+
+var transactionManager = new TransactionManager();
+await transactionManager.ExecuteTransactionAsync(employeeId:15, departmentId:3);
