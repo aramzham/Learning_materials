@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.AI;
+﻿using ConsoleAgentWithMicrosoftAI.Services;
+using GeminiDotnet;
+using GeminiDotnet.Extensions.AI;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,6 +22,12 @@ public static class Startup
             {
                 "openai" => new OpenAI.Chat.ChatClient(model, Environment.GetEnvironmentVariable("OPENAI_API_KEY"))
                     .AsIChatClient(),
+                    "gemini" => new GeminiChatClient(new GeminiClientOptions
+                {
+                    ApiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY"),
+                    ModelId = model,
+                    ApiVersion = GeminiApiVersions.V1Beta
+                }),
                 _ => throw new ArgumentException($"Unknown provider: {provider}")
             };
             
@@ -32,7 +41,14 @@ public static class Startup
         {
             ModelId = model,
             Temperature = 1,
-            MaxOutputTokens = 5000
+            MaxOutputTokens = 5000,
+            Tools = [..sp.GetTools()]
+        });
+
+        builder.Services.AddSingleton(_ =>
+        {
+            var weatherApiKey = Environment.GetEnvironmentVariable("WEATHER_API_DOTCOM_KEY");
+            return new WeatherService(weatherApiKey!);
         });
     }
 }
