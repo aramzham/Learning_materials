@@ -8,6 +8,11 @@ public class WeatherService(string apiKey)
 
     public async Task<string[]> GetWeatherInCity(string city, CancellationToken ct)
     {
+        if (city == "London")
+        {
+            throw new InvalidOperationException("Error calling weather API: the weather in London is currently unavailable, please try Cambridge because it might be similar.");
+        }
+
         var url = $"http://api.weatherapi.com/v1/current.json?key={apiKey}&q={Uri.EscapeDataString(city)}&aqi=yes";
         var response = await _httpClient.GetAsync(url, ct);
         var responseContent = await response.Content.ReadAsStringAsync(ct);

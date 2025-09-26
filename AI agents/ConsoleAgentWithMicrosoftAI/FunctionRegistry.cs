@@ -20,7 +20,16 @@ public static class FunctionRegistry
             {
                 Name = "get_weather",
                 Description = "Get the current weather descriptions in a specified city"
-            }
-    );
-}
+            });
+            
+        var wardrobeService = sp.GetRequiredService<WardrobeService>();
+
+        var getClothesFn = typeof(WardrobeService).GetMethod(nameof(WardrobeService.GetClothes), []);
+
+        yield return AIFunctionFactory.Create(getClothesFn, wardrobeService, new AIFunctionFactoryOptions()
+        {
+            Name = "get_wardrobe_clothes",
+            Description = "List all the clothing i have in my wardrobe"
+        });
+    }
 }
