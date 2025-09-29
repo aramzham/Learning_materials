@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.AI;
 
 namespace ConsoleAgentWithMicrosoftAI;
@@ -24,7 +25,40 @@ public static class ChatAgent
             if (string.IsNullOrWhiteSpace(input))
                 break;
             Console.ResetColor();
-            
+
+            if (input == "/history")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                foreach (var message in history)
+                {
+                    switch (message.Role.Value)
+                    {
+                        case "user":
+                        {
+                            Console.WriteLine($"USER: {message.Text}");
+                            continue;
+                        }
+                        case "assistant" when !string.IsNullOrWhiteSpace(message.Text):
+                        {
+                            Console.WriteLine($"AI: {message.Text}");
+                            continue;
+                        }
+                        case "assistant" when message.Contents.Any():
+                        {
+                            Console.WriteLine($"REQUEST: {JsonSerializer.Serialize(message.Contents[0])}");
+                            continue;
+                        }
+                        case "tool":
+                        {
+                            Console.WriteLine($"TOOL: {JsonSerializer.Serialize(message.Contents[0])}");
+                            continue;
+                        }
+                    }
+                }
+                Console.ResetColor();
+                continue;
+            }
+
             history.Add(new ChatMessage(ChatRole.User, input));
             
             var response = await client.GetResponseAsync(history, chatOptions);
