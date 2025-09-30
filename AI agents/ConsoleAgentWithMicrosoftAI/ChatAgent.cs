@@ -18,6 +18,9 @@ public static class ChatAgent
 
         Console.WriteLine("Ask me anything (empty = exit).");
 
+        var turnsSinceLastSummary = 0;
+        const int SUMMARY_INTERVAL = 5;
+        
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -65,6 +68,28 @@ public static class ChatAgent
 
             Console.WriteLine(response.Text);
             history.AddRange(response.Messages);
+            
+            turnsSinceLastSummary++;
+            if (turnsSinceLastSummary >= SUMMARY_INTERVAL)
+            {
+                var summary = await SummarizeHistory(history, client, chatOptions);
+                history = [new ChatMessage(ChatRole.System, $"You are a helpful CLI assistant. Use the provided functions when appropriate. If a tool call fails due to some invalid arguments, then make an attempt to fix it by using your best judgement, then try the tool call again. {summary}")];
+                turnsSinceLastSummary = 0;
+            }
         }
+    }
+    
+    private static async Task<string> SummarizeHistory(List<ChatMessage> history, IChatClient client, ChatOptions chatOptions)
+    {
+        var summaryPrompt = history.Aggregate("Summarize the conversation so far in 50 words or less, keep track of user details.", (current, msg) => current + $"\n{msg.Role}: {msg.Text}");
+
+        var summaryHistory = new List<ChatMessage>()
+        {
+            new(ChatRole.User, summaryPrompt)
+        };
+        
+        var response = await client.GetResponseAsync(summaryHistory, chatOptions);
+
+        return response.Text;
     }
 }
