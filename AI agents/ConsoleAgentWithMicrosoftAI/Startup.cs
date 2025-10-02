@@ -14,7 +14,7 @@ public static class Startup
     {
         builder.Services.AddLogging(l => l.AddConsole().SetMinimumLevel(LogLevel.Information));
         builder.Services.AddSingleton(sp => LoggerFactory.Create(b => b.AddConsole().SetMinimumLevel(LogLevel.Information)));
-        
+
         builder.Services.AddSingleton<IChatClient>(sp =>
         {
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -22,7 +22,7 @@ public static class Startup
             {
                 "openai" => new OpenAI.Chat.ChatClient(model, Environment.GetEnvironmentVariable("OPENAI_API_KEY"))
                     .AsIChatClient(),
-                    "gemini" => new GeminiChatClient(new GeminiClientOptions
+                "gemini" => new GeminiChatClient(new GeminiClientOptions
                 {
                     ApiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY"),
                     ModelId = model,
@@ -30,7 +30,7 @@ public static class Startup
                 }),
                 _ => throw new ArgumentException($"Unknown provider: {provider}")
             };
-            
+
             return new ChatClientBuilder(client)
                 .UseLogging(loggerFactory)
                 .UseFunctionInvocation(loggerFactory, c => { c.IncludeDetailedErrors = true; })
@@ -42,7 +42,7 @@ public static class Startup
             ModelId = model,
             Temperature = 1,
             MaxOutputTokens = 5000,
-            Tools = [..sp.GetTools()]
+            Tools = [.. sp.GetTools()]
         });
 
         builder.Services.AddSingleton(_ =>

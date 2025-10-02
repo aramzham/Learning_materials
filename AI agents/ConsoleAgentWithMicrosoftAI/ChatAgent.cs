@@ -20,7 +20,7 @@ public static class ChatAgent
 
         var turnsSinceLastSummary = 0;
         const int SUMMARY_INTERVAL = 5;
-        
+
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -37,25 +37,25 @@ public static class ChatAgent
                     switch (message.Role.Value)
                     {
                         case "user":
-                        {
-                            Console.WriteLine($"USER: {message.Text}");
-                            continue;
-                        }
+                            {
+                                Console.WriteLine($"USER: {message.Text}");
+                                continue;
+                            }
                         case "assistant" when !string.IsNullOrWhiteSpace(message.Text):
-                        {
-                            Console.WriteLine($"AI: {message.Text}");
-                            continue;
-                        }
+                            {
+                                Console.WriteLine($"AI: {message.Text}");
+                                continue;
+                            }
                         case "assistant" when message.Contents.Any():
-                        {
-                            Console.WriteLine($"REQUEST: {JsonSerializer.Serialize(message.Contents[0])}");
-                            continue;
-                        }
+                            {
+                                Console.WriteLine($"REQUEST: {JsonSerializer.Serialize(message.Contents[0])}");
+                                continue;
+                            }
                         case "tool":
-                        {
-                            Console.WriteLine($"TOOL: {JsonSerializer.Serialize(message.Contents[0])}");
-                            continue;
-                        }
+                            {
+                                Console.WriteLine($"TOOL: {JsonSerializer.Serialize(message.Contents[0])}");
+                                continue;
+                            }
                     }
                 }
                 Console.ResetColor();
@@ -63,12 +63,12 @@ public static class ChatAgent
             }
 
             history.Add(new ChatMessage(ChatRole.User, input));
-            
+
             var response = await client.GetResponseAsync(history, chatOptions);
 
             Console.WriteLine(response.Text);
             history.AddRange(response.Messages);
-            
+
             turnsSinceLastSummary++;
             if (turnsSinceLastSummary >= SUMMARY_INTERVAL)
             {
@@ -78,7 +78,7 @@ public static class ChatAgent
             }
         }
     }
-    
+
     private static async Task<string> SummarizeHistory(List<ChatMessage> history, IChatClient client, ChatOptions chatOptions)
     {
         var summaryPrompt = history.Aggregate("Summarize the conversation so far in 50 words or less, keep track of user details.", (current, msg) => current + $"\n{msg.Role}: {msg.Text}");
@@ -87,7 +87,7 @@ public static class ChatAgent
         {
             new(ChatRole.User, summaryPrompt)
         };
-        
+
         var response = await client.GetResponseAsync(summaryHistory, chatOptions);
 
         return response.Text;

@@ -21,7 +21,7 @@ public static class FunctionRegistry
                 Name = "get_weather",
                 Description = "Get the current weather descriptions in a specified city"
             });
-            
+
         var wardrobeService = sp.GetRequiredService<WardrobeService>();
 
         var getClothesFn = typeof(WardrobeService).GetMethod(nameof(WardrobeService.GetClothes), []);
@@ -31,7 +31,7 @@ public static class FunctionRegistry
             Name = "get_wardrobe_clothes",
             Description = "List all the clothing i have in my wardrobe"
         });
-        
+
         var emailService = sp.GetRequiredService<EmailService>();
         var sendEmailFn = typeof(EmailService).GetMethod(nameof(EmailService.EmailFriend), [typeof(string), typeof(string)]);
 

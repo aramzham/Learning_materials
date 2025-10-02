@@ -7,7 +7,7 @@ DotEnv
     .WithProbeForEnv() // searches upward for a .env file (project root, solution root, etc.)
     .WithTrimValues()
     .Load();
-    
+
 var provider = "openai";
 var model = "gpt-5-mini";
 for (int i = 0; i < args.Length; i++)

@@ -16,9 +16,9 @@ public class OpenAiService : IOpenAiService, IDisposable
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
-    
+
     private readonly HttpClient _httpClient = new();
-    
+
     public OpenAiService(string apiKey)
     {
         _httpClient.BaseAddress = new Uri("https://api.openai.com/v1/");
@@ -26,7 +26,7 @@ public class OpenAiService : IOpenAiService, IDisposable
         _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         _JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower));
     }
-    
+
     public async Task<ChatMessage> GetCompletion(List<ChatMessage> messages, CancellationToken cancellationToken)
     {
         var openAiRequest = new ChatRequest()
@@ -34,9 +34,9 @@ public class OpenAiService : IOpenAiService, IDisposable
             Model = "gpt-3.5-turbo",
             Messages = messages
         };
-        
+
         var jsonRequest = JsonSerializer.Serialize(openAiRequest, _JsonSerializerOptions);
-        
+
         using var content = new StringContent(jsonRequest, System.Text.Encoding.UTF8, "application/json");
 
         try
@@ -45,11 +45,11 @@ public class OpenAiService : IOpenAiService, IDisposable
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (!response.IsSuccessStatusCode)
                 throw new InvalidOperationException($"Error calling OpenAI API: {responseContent}");
-            
+
             var result = JsonSerializer.Deserialize<ChatResponse>(responseContent, _JsonSerializerOptions) ?? throw new InvalidOperationException("Failed to deserialize OpenAI response");
-            
+
             var firstChoice = result.Choices.FirstOrDefault();
-            
+
             if (firstChoice?.Message is null)
                 throw new InvalidOperationException("No message found in OpenAI response");
 

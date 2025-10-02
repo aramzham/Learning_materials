@@ -15,7 +15,7 @@ DotEnv
 var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 if (apiKey is null)
     throw new InvalidOperationException("OPENAI_API_KEY is not set");
-    
+
 List<ChatMessage> messages = [
     new ChatMessage()
     {
@@ -35,12 +35,13 @@ while (true)
     if (input is null || input.Equals("exit", StringComparison.CurrentCultureIgnoreCase))
         break;
     Console.ResetColor();
-    
+
     messages.Add(new ChatMessage()
     {
-        Role = ChatRole.User, Content = input
+        Role = ChatRole.User,
+        Content = input
     });
-    
+
     var response = await aiService.GetCompletion(messages, CancellationToken.None);
     messages.Add(response);
     Console.WriteLine(messages[^1].Content);
