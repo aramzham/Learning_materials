@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawJsonImplementation", "Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAgentWithMicrosoftAI", "ConsoleAgentWithMicrosoftAI\ConsoleAgentWithMicrosoftAI.csproj", "{7602CB82-3D3A-4EE8-A88E-2319223DCF57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceApp", "InvoiceApp\InvoiceApp.csproj", "{D16F0D59-3722-40D6-A298-88450B3F48CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAgentApi", "InvoiceAgentApi\InvoiceAgentApi.csproj", "{3CBCE500-925E-45B2-9689-B949ACB030DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{7602CB82-3D3A-4EE8-A88E-2319223DCF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7602CB82-3D3A-4EE8-A88E-2319223DCF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7602CB82-3D3A-4EE8-A88E-2319223DCF57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D16F0D59-3722-40D6-A298-88450B3F48CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D16F0D59-3722-40D6-A298-88450B3F48CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D16F0D59-3722-40D6-A298-88450B3F48CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D16F0D59-3722-40D6-A298-88450B3F48CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CBCE500-925E-45B2-9689-B949ACB030DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CBCE500-925E-45B2-9689-B949ACB030DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CBCE500-925E-45B2-9689-B949ACB030DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBCE500-925E-45B2-9689-B949ACB030DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
