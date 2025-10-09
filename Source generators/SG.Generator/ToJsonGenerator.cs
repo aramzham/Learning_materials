@@ -11,9 +11,9 @@ namespace SG.Generator
         private const string HelloWorld = """
                                           namespace SG.Generator
                                           {
-                                              public static class HelloWorld
+                                              public partial class HelloWorld
                                               {
-                                                  public static void SayHello() => Console.WriteLine("Hello World!");
+                                                  public void SayHello() => Console.WriteLine("Hello World!");
                                               }
                                           }
                                           """;
