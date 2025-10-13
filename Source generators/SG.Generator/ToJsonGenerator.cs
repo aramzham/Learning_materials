@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace SG.Generator
@@ -9,19 +11,82 @@ namespace SG.Generator
     public class ToJsonGenerator : IIncrementalGenerator
     {
         private const string HelloWorld = """
-                                          namespace SG.Generator
-                                          {
-                                              public partial class HelloWorld
-                                              {
-                                                  public void SayHello() => Console.WriteLine("Hello World!");
-                                              }
-                                          }
+                                          using System;
+
+                                          namespace SG.Generator;
+
+                                          [AttributeUsage(AttributeTargets.Class)]
+                                          public class ToJsonSerializerAttribute : Attribute;
                                           """;
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            context.RegisterPostInitializationOutput(ctx => ctx.AddSource("HelloWorld.g.cs", SourceText.From(HelloWorld, Encoding.UTF8)));
+            // #if DEBUG
+            // if (!System.Diagnostics.Debugger.IsAttached)
+            // {
+            //     System.Diagnostics.Debugger.Launch();
+            // }
+            // #endif
+
+            context.RegisterPostInitializationOutput(ctx =>
+                ctx.AddSource("ToJsonSerializerAttribute.g.cs", SourceText.From(HelloWorld, Encoding.UTF8)));
+
+            var provider = context.SyntaxProvider.CreateSyntaxProvider(Predicate, Transform);
+            
+            context.RegisterSourceOutput(provider, (productionContext, info) =>
+            {
+                throw new NotImplementedException();
+            });
         }
+
+        private ClassInfo? Transform(GeneratorSyntaxContext arg1, CancellationToken ct)
+        {
+            var classDeclarationSyntax = (ClassDeclarationSyntax)arg1.Node;
+
+            foreach (var attributeList in classDeclarationSyntax.AttributeLists)
+            {
+                foreach (var attributeSyntax in attributeList.Attributes)
+                {
+                    if (ct.IsCancellationRequested)
+                        return null;
+                    
+                    var attributeName = attributeSyntax.Name.ToString();
+                    if (attributeName != "ToJsonSerializer" && attributeName != "ToJsonSerializerAttribute") continue;
+                    
+                    var attributeSymbolInfo = arg1.SemanticModel.GetSymbolInfo(attributeSyntax, ct);
+                    
+                    if (attributeSymbolInfo.Symbol is not IMethodSymbol methodSymbol) continue;
+                    
+                    var attributeSymbol = methodSymbol.ContainingType;
+                    if (attributeSymbol.Name != "ToJsonSerializerAttribute" &&
+                        attributeSymbol.Name != "ToJsonSerializer") 
+                        continue;
+                    
+                    var classSymbol = arg1.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
+                    
+                    var classInfo = new ClassInfo()
+                    {
+                        Namespace = classSymbol?.ContainingNamespace.ToString(),
+                        Name = classSymbol?.Name
+                    };
+
+                    return classInfo;
+                }
+            }
+            
+            return new ClassInfo();
+        }
+
+        private static bool Predicate(SyntaxNode node, CancellationToken ct)
+        {
+            return node is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
+        }
+    }
+
+    public record struct ClassInfo
+    {
+        public string? Namespace { get; set; }
+        public string? Name { get; set; }
     }
 }
 
