@@ -3,7 +3,7 @@
 namespace SG.Domain.Entities;
 
 [ToJsonSerializer]
-public class Person
+public partial class Person
 {
     public string EmailAddress { get; set; } = null!;
     public string FirstName { get; set; } = null!;
