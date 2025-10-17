@@ -86,7 +86,11 @@ namespace SG.Generator
             var output = PartialClassTemplate
                 .Replace("{{namespace}}", classInfo.Value.Namespace)
                 .Replace("{{className}}", classInfo.Value.Name)
-                .Replace("{{generatedAt}}", $" at {DateTime.Now:s}")
+                #if DEBUG
+                .Replace("{{generatedAt}}", $" at {DateTime.Now:T}")
+                #else
+                .Replace("{{generatedAt}}", string.Empty)
+                #endif
                 .Replace("{{classAccessibility}}", classInfo.Value.Accessibility.ToString().ToLower())
                 .Replace("{{properties}}", properties);
             

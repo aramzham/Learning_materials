@@ -1,0 +1,22 @@
+﻿using System.Text;
+    
+    namespace SG.Domain.Entities
+    {
+        internal partial class Address
+        {
+            public string ToJson()
+            {
+                var builder = new StringBuilder();
+                
+                builder.AppendLine("{");
+                builder.AppendLine($"\t\"AddressLine1\": \"{AddressLine1}\",");
+builder.AppendLine($"\t\"AddressLine2\": \"{AddressLine2}\",");
+builder.AppendLine($"\t\"City\": \"{City}\",");
+builder.AppendLine($"\t\"PostalCode\": \"{PostalCode}\",");
+builder.AppendLine($"\t\"State\": \"{State}\"");
+                builder.AppendLine("}");
+                
+                return builder.ToString();
+            }
+        }
+    }

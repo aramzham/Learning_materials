@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SG.Generator", "SG.Generato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SG.Domain", "SG.Domain\SG.Domain.csproj", "{227304AF-317A-41C1-A724-2FA076607A6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SG.Tests.Unit", "SG.Tests.Unit\SG.Tests.Unit.csproj", "{12C10126-CBA2-4FFD-8F4E-42667BC5739E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{227304AF-317A-41C1-A724-2FA076607A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{227304AF-317A-41C1-A724-2FA076607A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{227304AF-317A-41C1-A724-2FA076607A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12C10126-CBA2-4FFD-8F4E-42667BC5739E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C10126-CBA2-4FFD-8F4E-42667BC5739E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C10126-CBA2-4FFD-8F4E-42667BC5739E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C10126-CBA2-4FFD-8F4E-42667BC5739E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
