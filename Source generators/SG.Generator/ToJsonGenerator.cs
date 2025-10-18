@@ -63,19 +63,21 @@ namespace SG.Generator
             context.RegisterPostInitializationOutput(ctx =>
                 ctx.AddSource("ToJsonSerializerAttribute.g.cs", SourceText.From(HelloWorld, Encoding.UTF8)));
 
-            var provider = context.SyntaxProvider.CreateSyntaxProvider(Predicate, Transform)
-                .Where(x => x != null);
+            // var provider = context.SyntaxProvider.CreateSyntaxProvider(Predicate, Transform)
+            //     .Where(x => x != null);
+            var provider = context.SyntaxProvider
+                .ForAttributeWithMetadataName(
+                    "SG.Generator.ToJsonSerializerAttribute",
+                    (node, ct) => true,
+                    Transform);
             
             context.RegisterSourceOutput(provider, Generate);
         }
 
-        private void Generate(SourceProductionContext context, ClassInfo? classInfo)
+        private void Generate(SourceProductionContext context, ClassInfo classInfo)
         {
-            if (classInfo is null)
-                return;
-
             var builder = new StringBuilder();
-            foreach (var property in classInfo.Value.Properties)
+            foreach (var property in classInfo.Properties)
             {
                 var propertyTemplate = PropertyTemplate.Replace("{{name}}", property.Name);
                 builder.AppendLine(propertyTemplate);
@@ -84,57 +86,33 @@ namespace SG.Generator
             var properties = builder.ToString(0, builder.Length - 6) + "\");";
             
             var output = PartialClassTemplate
-                .Replace("{{namespace}}", classInfo.Value.Namespace)
-                .Replace("{{className}}", classInfo.Value.Name)
+                .Replace("{{namespace}}", classInfo.Namespace)
+                .Replace("{{className}}", classInfo.Name)
                 #if DEBUG
                 .Replace("{{generatedAt}}", $" at {DateTime.Now:T}")
                 #else
                 .Replace("{{generatedAt}}", string.Empty)
                 #endif
-                .Replace("{{classAccessibility}}", classInfo.Value.Accessibility.ToString().ToLower())
+                .Replace("{{classAccessibility}}", classInfo.Accessibility.ToString().ToLower())
                 .Replace("{{properties}}", properties);
             
-            context.AddSource($"{classInfo.Value.Name}.g.cs", output);
+            context.AddSource($"{classInfo.Name}.g.cs", output);
         }
 
-        private ClassInfo? Transform(GeneratorSyntaxContext arg1, CancellationToken ct)
+        private ClassInfo Transform(GeneratorAttributeSyntaxContext syntaxContext, CancellationToken ct)
         {
-            var classDeclarationSyntax = (ClassDeclarationSyntax)arg1.Node;
+            var classDeclarationSyntax = (ClassDeclarationSyntax)syntaxContext.TargetNode;
+            var classSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
 
-            foreach (var attributeList in classDeclarationSyntax.AttributeLists)
+            var classInfo = new ClassInfo()
             {
-                foreach (var attributeSyntax in attributeList.Attributes)
-                {
-                    if (ct.IsCancellationRequested)
-                        return null;
-                    
-                    var attributeName = attributeSyntax.Name.ToString();
-                    if (attributeName != "ToJsonSerializer" && attributeName != "ToJsonSerializerAttribute") continue;
-                    
-                    var attributeSymbolInfo = arg1.SemanticModel.GetSymbolInfo(attributeSyntax, ct);
-                    
-                    if (attributeSymbolInfo.Symbol is not IMethodSymbol methodSymbol) continue;
-                    
-                    var attributeSymbol = methodSymbol.ContainingType;
-                    if (attributeSymbol.Name != "ToJsonSerializerAttribute" &&
-                        attributeSymbol.Name != "ToJsonSerializer") 
-                        continue;
-                    
-                    var classSymbol = arg1.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
-                    
-                    var classInfo = new ClassInfo()
-                    {
-                        Namespace = classSymbol?.ContainingNamespace.ToString(),
-                        Name = classSymbol?.Name,
-                        Accessibility = classSymbol?.DeclaredAccessibility,
-                        Properties = GetProperties(classSymbol)
-                    };
+                Namespace = classSymbol?.ContainingNamespace.ToString(),
+                Name = classSymbol?.Name,
+                Accessibility = classSymbol?.DeclaredAccessibility,
+                Properties = GetProperties(classSymbol)
+            };
 
-                    return classInfo;
-                }
-            }
-            
-            return null;
+            return classInfo;
         }
 
         private static IEnumerable<PropertyInfo> GetProperties(ISymbol? classSymbol)
@@ -151,11 +129,6 @@ namespace SG.Generator
             });
 
             return properties;
-        }
-
-        private static bool Predicate(SyntaxNode node, CancellationToken ct)
-        {
-            return node is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
         }
     }
 
