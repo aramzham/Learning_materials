@@ -6,9 +6,11 @@ namespace SG.Generator;
 public class ToJsonSerializerAttribute : Attribute
 {
     public bool Minified { get; }
+    public Type TargetType { get; }
     
-    public ToJsonSerializerAttribute(bool minified = false)
+    public ToJsonSerializerAttribute(Type targetType, bool minified = false)
     {
         Minified = minified;
+        TargetType = targetType;
     }
 }

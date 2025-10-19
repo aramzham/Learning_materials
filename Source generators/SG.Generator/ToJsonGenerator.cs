@@ -21,10 +21,12 @@ namespace SG.Generator
                                           public class ToJsonSerializerAttribute : Attribute
                                           {
                                               public bool Minified { get; }
+                                              public Type TargetType { get; }
                                               
-                                              public ToJsonSerializerAttribute(bool minified = false)
+                                              public ToJsonSerializerAttribute(Type targetType, bool minified = false)
                                               {
                                                   Minified = minified;
+                                                  TargetType = targetType;
                                               }
                                           }
                                           """;
@@ -115,15 +117,16 @@ namespace SG.Generator
         private ClassInfo Transform(GeneratorAttributeSyntaxContext syntaxContext, CancellationToken ct)
         {
             var attribute = syntaxContext.Attributes.Single();
-            var minified = attribute.ConstructorArguments[0].Value as bool? is true;
+            var targetType = attribute.ConstructorArguments[0].Value as ISymbol;
+            var minified = attribute.ConstructorArguments[1].Value as bool? is true;
             var classDeclarationSyntax = (ClassDeclarationSyntax)syntaxContext.TargetNode;
             var classSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
 
             var classInfo = new ClassInfo()
             {
-                Namespace = classSymbol?.ContainingNamespace.ToString(),
-                Name = classSymbol?.Name,
-                Accessibility = classSymbol?.DeclaredAccessibility,
+                Namespace = targetType?.ContainingNamespace.ToString(),
+                Name = targetType?.Name,
+                Accessibility = targetType?.DeclaredAccessibility,
                 Properties = GetProperties(classSymbol),
                 Minified = minified
             };
