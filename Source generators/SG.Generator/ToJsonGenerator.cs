@@ -12,13 +12,21 @@ namespace SG.Generator
     [Generator]
     public class ToJsonGenerator : IIncrementalGenerator
     {
-        private const string HelloWorld = """
+        private const string ToJsonSerializerAttributeCode = """
                                           using System;
 
                                           namespace SG.Generator;
 
                                           [AttributeUsage(AttributeTargets.Class)]
-                                          public class ToJsonSerializerAttribute : Attribute;
+                                          public class ToJsonSerializerAttribute : Attribute
+                                          {
+                                              public bool Minified { get; }
+                                              
+                                              public ToJsonSerializerAttribute(bool minified = false)
+                                              {
+                                                  Minified = minified;
+                                              }
+                                          }
                                           """;
         
         private const string PartialClassTemplate = """
@@ -38,9 +46,9 @@ namespace SG.Generator
                                                                 {
                                                                     var builder = new StringBuilder();
                                                                     
-                                                                    builder.AppendLine("{");
+                                                                    builder.{{appendLine}}("{");
                                                                     {{properties}}
-                                                                    builder.AppendLine("}");
+                                                                    builder.{{appendLine}}("}");
                                                                     
                                                                     return builder.ToString();
                                                                 }
@@ -48,7 +56,7 @@ namespace SG.Generator
                                                         }
                                                     """;
         private const string PropertyTemplate = """
-                                                builder.AppendLine($"\t\"{{name}}\": \"{{{name}}}\",");
+                                                builder.{{appendLine}}($"{{space}}{{space}}\"{{name}}\":{{space}}\"{{{name}}}\",");
                                                 """;
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -61,7 +69,7 @@ namespace SG.Generator
             // #endif
 
             context.RegisterPostInitializationOutput(ctx =>
-                ctx.AddSource("ToJsonSerializerAttribute.g.cs", SourceText.From(HelloWorld, Encoding.UTF8)));
+                ctx.AddSource("ToJsonSerializerAttribute.g.cs", SourceText.From(ToJsonSerializerAttributeCode, Encoding.UTF8)));
 
             // var provider = context.SyntaxProvider.CreateSyntaxProvider(Predicate, Transform)
             //     .Where(x => x != null);
@@ -79,7 +87,10 @@ namespace SG.Generator
             var builder = new StringBuilder();
             foreach (var property in classInfo.Properties)
             {
-                var propertyTemplate = PropertyTemplate.Replace("{{name}}", property.Name);
+                var propertyTemplate = PropertyTemplate
+                    .Replace("{{name}}", property.Name)
+                    .Replace("{{space}}", classInfo.Minified ? string.Empty : " ")
+                    .Replace("{{appendLine}}", classInfo.Minified ? "Append" : "AppendLine");
                 builder.AppendLine(propertyTemplate);
             }
             
@@ -94,13 +105,17 @@ namespace SG.Generator
                 .Replace("{{generatedAt}}", string.Empty)
                 #endif
                 .Replace("{{classAccessibility}}", classInfo.Accessibility.ToString().ToLower())
-                .Replace("{{properties}}", properties);
+                .Replace("{{properties}}", properties)
+                .Replace("{{space}}", classInfo.Minified ? string.Empty : " ")
+                .Replace("{{appendLine}}", classInfo.Minified ? "Append" : "AppendLine");
             
             context.AddSource($"{classInfo.Name}.g.cs", output);
         }
 
         private ClassInfo Transform(GeneratorAttributeSyntaxContext syntaxContext, CancellationToken ct)
         {
+            var attribute = syntaxContext.Attributes.Single();
+            var minified = attribute.ConstructorArguments[0].Value as bool? is true;
             var classDeclarationSyntax = (ClassDeclarationSyntax)syntaxContext.TargetNode;
             var classSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
 
@@ -109,7 +124,8 @@ namespace SG.Generator
                 Namespace = classSymbol?.ContainingNamespace.ToString(),
                 Name = classSymbol?.Name,
                 Accessibility = classSymbol?.DeclaredAccessibility,
-                Properties = GetProperties(classSymbol)
+                Properties = GetProperties(classSymbol),
+                Minified = minified
             };
 
             return classInfo;
@@ -138,13 +154,15 @@ namespace SG.Generator
         {
             return Namespace == other.Namespace && 
                    Name == other.Name && 
-                   Accessibility == other.Accessibility && 
+                   Accessibility == other.Accessibility &&
+                   Minified == other.Minified &&
                    Properties.SequenceEqual(other.Properties); // checks if the items in the collection are equal
         }
 
         public readonly override int GetHashCode()
         {
             var hashCode = Accessibility?.GetHashCode() ?? 0;
+            hashCode = (hashCode * 397) ^ Minified.GetHashCode();
             hashCode = (hashCode * 397) ^ (Namespace?.GetHashCode() ?? 0);
             hashCode = (hashCode * 397) ^ (Name?.GetHashCode() ?? 0);
             hashCode = (hashCode * 397) ^ Properties.Aggregate(hashCode, (current, property) => (current ^ current + 397) ^ property.GetHashCode());
@@ -155,6 +173,7 @@ namespace SG.Generator
         public string? Name { get; set; }
         public Accessibility? Accessibility { get; set; }
         public IEnumerable<PropertyInfo> Properties { get; set; }
+        public bool Minified { get; set; }
     }
     
     public record struct PropertyInfo
