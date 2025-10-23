@@ -21,6 +21,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeBuildOutput>false</IncludeBuildOutput>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
