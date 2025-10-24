@@ -3,7 +3,7 @@
 namespace SG.Domain.Entities;
 
 [ToJsonSerializer(typeof(Address))]
-internal partial class Address
+internal partial record Address
 {
     // comments won't regenerate the code because we had caching with ClassInfo
     // we are interested only in changes that are reflected in ClassInfo

@@ -2,7 +2,7 @@
 
 namespace SG.Generator;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class ToJsonSerializerAttribute : Attribute
 {
     public bool Minified { get; }

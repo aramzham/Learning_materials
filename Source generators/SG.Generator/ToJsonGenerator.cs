@@ -17,7 +17,7 @@ namespace SG.Generator
 
                                           namespace SG.Generator;
 
-                                          [AttributeUsage(AttributeTargets.Class)]
+                                          [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
                                           public class ToJsonSerializerAttribute : Attribute
                                           {
                                               public bool Minified { get; }
@@ -42,7 +42,7 @@ namespace SG.Generator
                                                         
                                                         namespace {{namespace}}
                                                         {
-                                                            {{classAccessibility}} partial class {{className}}
+                                                            {{classAccessibility}} partial {{typeKind}} {{className}}
                                                             {
                                                                 public string ToJson()
                                                                 {
@@ -73,8 +73,6 @@ namespace SG.Generator
             context.RegisterPostInitializationOutput(ctx =>
                 ctx.AddSource("ToJsonSerializerAttribute.g.cs", SourceText.From(ToJsonSerializerAttributeCode, Encoding.UTF8)));
 
-            // var provider = context.SyntaxProvider.CreateSyntaxProvider(Predicate, Transform)
-            //     .Where(x => x != null);
             var provider = context.SyntaxProvider
                 .ForAttributeWithMetadataName(
                     "SG.Generator.ToJsonSerializerAttribute",
@@ -107,6 +105,7 @@ namespace SG.Generator
                 .Replace("{{generatedAt}}", string.Empty)
                 #endif
                 .Replace("{{classAccessibility}}", classInfo.Accessibility.ToString().ToLower())
+                .Replace("{{typeKind}}", classInfo.TypeKind)
                 .Replace("{{properties}}", properties)
                 .Replace("{{space}}", classInfo.Minified ? string.Empty : " ")
                 .Replace("{{appendLine}}", classInfo.Minified ? "Append" : "AppendLine");
@@ -119,16 +118,17 @@ namespace SG.Generator
             var attribute = syntaxContext.Attributes.Single();
             var targetType = attribute.ConstructorArguments[0].Value as ISymbol;
             var minified = attribute.ConstructorArguments[1].Value as bool? is true;
-            var classDeclarationSyntax = (ClassDeclarationSyntax)syntaxContext.TargetNode;
-            var classSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
+            var declaredSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(syntaxContext.TargetNode, ct);
+            var isRecord = ((ITypeSymbol)targetType).IsRecord;
 
             var classInfo = new ClassInfo()
             {
                 Namespace = targetType?.ContainingNamespace.ToString(),
                 Name = targetType?.Name,
                 Accessibility = targetType?.DeclaredAccessibility,
-                Properties = GetProperties(classSymbol),
-                Minified = minified
+                Properties = GetProperties(declaredSymbol),
+                Minified = minified,
+                TypeKind = $"{(isRecord ? "record " : string.Empty)}{((ITypeSymbol)targetType).TypeKind.ToString().ToLower()}"
             };
 
             return classInfo;
@@ -140,6 +140,7 @@ namespace SG.Generator
                 return [];
             
             var properties = namedTypeSymbol.GetMembers().OfType<IPropertySymbol>()
+                .Where(p => p.Name != "EqualityContract")
                 .OrderBy(p => p.Name)
                 .Select(p => new PropertyInfo()
             {
@@ -177,6 +178,7 @@ namespace SG.Generator
         public Accessibility? Accessibility { get; set; }
         public IEnumerable<PropertyInfo> Properties { get; set; }
         public bool Minified { get; set; }
+        public string TypeKind { get; set; }
     }
     
     public record struct PropertyInfo
