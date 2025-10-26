@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -82,58 +83,87 @@ namespace SG.Generator
             context.RegisterSourceOutput(provider, Generate);
         }
 
-        private void Generate(SourceProductionContext context, ClassInfo classInfo)
+        private void Generate(SourceProductionContext context, TypeInfo typeInfo)
         {
+            if (!typeInfo.IsPartial && typeInfo.Location != Location.None)
+            {
+                context.ReportDiagnostic(TargetTypeNotPartial(typeInfo.Location, typeInfo.Name ?? string.Empty));
+                return;
+            }
+            
             var builder = new StringBuilder();
-            foreach (var property in classInfo.Properties)
+            foreach (var property in typeInfo.Properties)
             {
                 var propertyTemplate = PropertyTemplate
                     .Replace("{{name}}", property.Name)
-                    .Replace("{{space}}", classInfo.Minified ? string.Empty : " ")
-                    .Replace("{{appendLine}}", classInfo.Minified ? "Append" : "AppendLine");
+                    .Replace("{{space}}", typeInfo.Minified ? string.Empty : " ")
+                    .Replace("{{appendLine}}", typeInfo.Minified ? "Append" : "AppendLine");
                 builder.AppendLine(propertyTemplate);
             }
             
             var properties = builder.ToString(0, builder.Length - 6) + "\");";
             
             var output = PartialClassTemplate
-                .Replace("{{namespace}}", classInfo.Namespace)
-                .Replace("{{className}}", classInfo.Name)
+                .Replace("{{namespace}}", typeInfo.Namespace)
+                .Replace("{{className}}", typeInfo.Name)
                 #if DEBUG
                 .Replace("{{generatedAt}}", $" at {DateTime.Now:T}")
                 #else
                 .Replace("{{generatedAt}}", string.Empty)
                 #endif
-                .Replace("{{classAccessibility}}", classInfo.Accessibility.ToString().ToLower())
-                .Replace("{{typeKind}}", classInfo.TypeKind)
+                .Replace("{{classAccessibility}}", typeInfo.Accessibility.ToString().ToLower())
+                .Replace("{{typeKind}}", typeInfo.TypeKind)
                 .Replace("{{properties}}", properties)
-                .Replace("{{space}}", classInfo.Minified ? string.Empty : " ")
-                .Replace("{{appendLine}}", classInfo.Minified ? "Append" : "AppendLine");
+                .Replace("{{space}}", typeInfo.Minified ? string.Empty : " ")
+                .Replace("{{appendLine}}", typeInfo.Minified ? "Append" : "AppendLine");
             
-            context.AddSource($"{classInfo.Name}.g.cs", output);
+            context.AddSource($"{typeInfo.Name}.g.cs", output);
         }
 
-        private ClassInfo Transform(GeneratorAttributeSyntaxContext syntaxContext, CancellationToken ct)
+        private TypeInfo Transform(GeneratorAttributeSyntaxContext syntaxContext, CancellationToken ct)
         {
             var attribute = syntaxContext.Attributes.Single();
             var targetType = attribute.ConstructorArguments[0].Value as ISymbol;
             var minified = attribute.ConstructorArguments[1].Value as bool? is true;
             var declaredSymbol = syntaxContext.SemanticModel.GetDeclaredSymbol(syntaxContext.TargetNode, ct);
             var isRecord = ((ITypeSymbol)targetType).IsRecord;
+            var nonPartialDeclarations = targetType.DeclaringSyntaxReferences
+                .Select(s => s.GetSyntax(ct))
+                .OfType<TypeDeclarationSyntax>()
+                .FirstOrDefault(s => !s.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)));
 
-            var classInfo = new ClassInfo()
+            var typeInfo = new TypeInfo()
             {
                 Namespace = targetType?.ContainingNamespace.ToString(),
                 Name = targetType?.Name,
                 Accessibility = targetType?.DeclaredAccessibility,
                 Properties = GetProperties(declaredSymbol),
                 Minified = minified,
-                TypeKind = $"{(isRecord ? "record " : string.Empty)}{((ITypeSymbol)targetType).TypeKind.ToString().ToLower()}"
+                TypeKind = $"{(isRecord ? "record " : string.Empty)}{((ITypeSymbol)targetType).TypeKind.ToString().ToLower()}",
+                IsPartial = nonPartialDeclarations is null,
+                Location = nonPartialDeclarations?.Identifier.GetLocation() ?? Location.None
             };
 
-            return classInfo;
+            return typeInfo;
         }
 
+        private static Diagnostic TargetTypeNotPartial(Location location, string identifier)
+        {
+            
+            var diagnostic = Diagnostic.Create(
+                new DiagnosticDescriptor(
+                    "SG001",
+                    "Target type must be partial",
+                    "Cannot generate code for type '{0}' because it is not partial.",
+                    "ToJsonGenerator",
+                    DiagnosticSeverity.Error,
+                    true),
+                location,
+                identifier);
+
+            return diagnostic;
+        }
+        
         private static IEnumerable<PropertyInfo> GetProperties(ISymbol? classSymbol)
         {
             if (classSymbol is not INamedTypeSymbol namedTypeSymbol)
@@ -152,14 +182,16 @@ namespace SG.Generator
         }
     }
 
-    public record struct ClassInfo
+    public record struct TypeInfo
     {
-        public readonly bool Equals(ClassInfo other)
+        public readonly bool Equals(TypeInfo other)
         {
             return Namespace == other.Namespace && 
                    Name == other.Name && 
                    Accessibility == other.Accessibility &&
                    Minified == other.Minified &&
+                   IsPartial == other.IsPartial &&
+                   TypeKind == other.TypeKind &&
                    Properties.SequenceEqual(other.Properties); // checks if the items in the collection are equal
         }
 
@@ -170,6 +202,7 @@ namespace SG.Generator
             hashCode = (hashCode * 397) ^ (Namespace?.GetHashCode() ?? 0);
             hashCode = (hashCode * 397) ^ (Name?.GetHashCode() ?? 0);
             hashCode = (hashCode * 397) ^ Properties.Aggregate(hashCode, (current, property) => (current ^ current + 397) ^ property.GetHashCode());
+            hashCode = (hashCode * 397) ^ IsPartial.GetHashCode();
             return hashCode;
         }
 
@@ -179,6 +212,8 @@ namespace SG.Generator
         public IEnumerable<PropertyInfo> Properties { get; set; }
         public bool Minified { get; set; }
         public string TypeKind { get; set; }
+        public bool IsPartial { get; set; }
+        public Location Location { get; set; }
     }
     
     public record struct PropertyInfo
