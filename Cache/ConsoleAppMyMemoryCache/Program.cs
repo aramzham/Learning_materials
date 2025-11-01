@@ -1,8 +1,16 @@
-﻿var cache = new MyMemoryCache();
+﻿using System.Collections.Concurrent;
+
+var cache = new MyMemoryCache();
 
 // set
-cache.Set("foo", "foo", TimeSpan.FromSeconds(2));
-cache.Set("bar", "bar", TimeSpan.FromSeconds(5));
+cache.Set("foo", "foo", new MyMemoryCacheEntryOptions()
+{
+    Duration = TimeSpan.FromSeconds(5)
+});
+cache.Set("bar", "bar", new MyMemoryCacheEntryOptions()
+{
+    Duration = TimeSpan.FromSeconds(2)
+});
 cache.Set("abc", null);
 
 // get
@@ -27,14 +35,28 @@ Console.WriteLine("EXPIRATION");
 Console.WriteLine($"foo: {cache.Get("foo")}, exists - {cache.TryGetValue("foo", out _)}, is null - {cache.Get("foo") is null}");
 Console.WriteLine($"bar: {cache.Get("bar")}, exists - {cache.TryGetValue("bar", out _)}, is null - {cache.Get("bar") is null}");
 
-
-public class  MyMemoryCache
+// validation
+Console.WriteLine("VALIDATION");
+try
 {
-    private readonly Dictionary<string, MyMemoryCacheEntry> _cache = new();
+    cache.Set(null, "foo");
+    Console.WriteLine("FAIL");
+}
+catch (ArgumentNullException)
+{
+    Console.WriteLine("Validation works");
+}
 
-    public void Set(string key, object? value, TimeSpan? absoluteExpirationRelativeToNow = null)
+public class MyMemoryCache(MyMemoryCacheOptions? options = null)
+{
+    private readonly MyMemoryCacheOptions _options = options ?? new MyMemoryCacheOptions();
+    private readonly ConcurrentDictionary<string, MyMemoryCacheEntry> _cache = [];
+
+    public void Set(string key, object? value, MyMemoryCacheEntryOptions? entryOptions = null)
     {
-        _cache[key] = new MyMemoryCacheEntry(value, DateTimeOffset.Now.Add(absoluteExpirationRelativeToNow ?? TimeSpan.FromMinutes(5)));
+        Validate(key);
+        
+        _cache[key] = new MyMemoryCacheEntry(value, DateTimeOffset.Now.Add(entryOptions?.Duration ?? _options.DefaultDuration));
     }
 
     public object? Get(string key)
@@ -44,7 +66,9 @@ public class  MyMemoryCache
 
     public void Remove(string key)
     {
-        _cache.Remove(key);
+        Validate(key);
+        
+        _ = _cache.TryRemove(key, out _);
     }
 
     public bool TryGetValue(string key, out object? value)
@@ -63,10 +87,25 @@ public class  MyMemoryCache
         value = null;
         return false;
     }
+
+    private void Validate(string key)
+    {
+        ArgumentNullException.ThrowIfNull(key);
+    }
 }
 
 public class MyMemoryCacheEntry(object? value, DateTimeOffset absoluteExpiration)
 {
     public object? Value { get; } = value;
     public DateTimeOffset AbsoluteExpiration { get; } = absoluteExpiration;
+}
+
+public class MyMemoryCacheOptions
+{
+    public TimeSpan DefaultDuration { get; set; } = TimeSpan.FromMinutes(5);
+}
+
+public class MyMemoryCacheEntryOptions
+{
+    public TimeSpan? Duration { get; set; }
 }
