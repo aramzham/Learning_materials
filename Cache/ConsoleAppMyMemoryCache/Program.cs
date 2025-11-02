@@ -47,11 +47,40 @@ catch (ArgumentNullException)
     Console.WriteLine("Validation works");
 }
 
-public class MyMemoryCache(MyMemoryCacheOptions? options = null)
+// eviction
+cache.Set("foo1", "foo", new MyMemoryCacheEntryOptions()
 {
-    private readonly MyMemoryCacheOptions _options = options ?? new MyMemoryCacheOptions();
+    Duration = TimeSpan.FromSeconds(1)
+});
+cache.Set("bar1", "bar", new MyMemoryCacheEntryOptions()
+{
+    Duration = TimeSpan.FromSeconds(1)
+});
+
+await Task.Delay(TimeSpan.FromSeconds(1.5));
+
+Console.WriteLine("Hi!");
+
+public class MyMemoryCache
+{
+    private readonly MyMemoryCacheOptions _options;
     private readonly ConcurrentDictionary<string, MyMemoryCacheEntry> _cache = [];
 
+    public MyMemoryCache(MyMemoryCacheOptions? options = null)
+    {
+        _options = options ?? new MyMemoryCacheOptions();
+        
+        Task.Run(async () =>
+        {
+            while (true)
+            {
+                await Task.Delay(_options.EvictionInterval);
+                Console.WriteLine("Evicting expired entries");
+                EvictExpired();
+            }
+        });
+    }
+    
     public void Set(string key, object? value, MyMemoryCacheEntryOptions? entryOptions = null)
     {
         Validate(key);
@@ -87,6 +116,17 @@ public class MyMemoryCache(MyMemoryCacheOptions? options = null)
         value = null;
         return false;
     }
+    
+    private void EvictExpired()
+    {
+        foreach (var key in _cache.Keys)
+        {
+            if (_cache[key].AbsoluteExpiration < DateTimeOffset.Now)
+            {
+                Remove(key);
+            }
+        }
+    }
 
     private void Validate(string key)
     {
@@ -103,6 +143,7 @@ public class MyMemoryCacheEntry(object? value, DateTimeOffset absoluteExpiration
 public class MyMemoryCacheOptions
 {
     public TimeSpan DefaultDuration { get; set; } = TimeSpan.FromMinutes(5);
+    public TimeSpan EvictionInterval { get; set; } = TimeSpan.FromMinutes(5);
 }
 
 public class MyMemoryCacheEntryOptions
