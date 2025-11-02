@@ -3,7 +3,7 @@
 var cache = new MyMemoryCache();
 
 // set
-cache.Set("foo", "foo", new MyMemoryCacheEntryOptions()
+cache.Set("foo", 123, new MyMemoryCacheEntryOptions()
 {
     Duration = TimeSpan.FromSeconds(5)
 });
@@ -11,11 +11,11 @@ cache.Set("bar", "bar", new MyMemoryCacheEntryOptions()
 {
     Duration = TimeSpan.FromSeconds(2)
 });
-cache.Set("abc", null);
+cache.Set<object?>("abc", null);
 
 // get
-var foo = cache.Get("foo");
-var bar = cache.Get("bar");
+var foo = cache.Get<int?>("foo");
+var bar = cache.Get<string?>("bar");
 
 Console.WriteLine("GET SET");
 Console.WriteLine($"foo: {foo}");
@@ -23,23 +23,23 @@ Console.WriteLine($"bar: {bar}");
 
 // remove
 cache.Remove("foo");
-foo = cache.Get("foo");
+foo = cache.Get<int?>("foo");
 Console.WriteLine("REMOVE");
-Console.WriteLine($"foo: {foo}, exists - {cache.TryGetValue("foo", out _)}, is null - {foo is null}");
-Console.WriteLine($"bar: {bar}, exists - {cache.TryGetValue("bar", out _)}, is null - {bar is null}");
-Console.WriteLine($"abc: {cache.Get("abc")}, exists - {cache.TryGetValue("abc", out _)}, is null - {cache.Get("abc") is null}");
+Console.WriteLine($"foo: {foo}, exists - {cache.TryGetValue<int?>("foo", out _)}, is null - {foo is null}");
+Console.WriteLine($"bar: {bar}, exists - {cache.TryGetValue<string?>("bar", out _)}, is null - {bar is null}");
+Console.WriteLine($"abc: {cache.Get<object?>("abc")}, exists - {cache.TryGetValue<object?>("abc", out _)}, is null - {cache.Get<object?>("abc") is null}");
 
 // expiration
 await Task.Delay(TimeSpan.FromSeconds(5));
 Console.WriteLine("EXPIRATION");
-Console.WriteLine($"foo: {cache.Get("foo")}, exists - {cache.TryGetValue("foo", out _)}, is null - {cache.Get("foo") is null}");
-Console.WriteLine($"bar: {cache.Get("bar")}, exists - {cache.TryGetValue("bar", out _)}, is null - {cache.Get("bar") is null}");
+Console.WriteLine($"foo: {cache.Get<int?>("foo")}, exists - {cache.TryGetValue<int?>("foo", out _)}, is null - {cache.Get<int?>("foo") is null}");
+Console.WriteLine($"bar: {cache.Get<string?>("bar")}, exists - {cache.TryGetValue<string?>("bar", out _)}, is null - {cache.Get<string?>("bar") is null}");
 
 // validation
 Console.WriteLine("VALIDATION");
 try
 {
-    cache.Set(null, "foo");
+    cache.Set<string?>(null, "foo");
     Console.WriteLine("FAIL");
 }
 catch (ArgumentNullException)
@@ -48,7 +48,7 @@ catch (ArgumentNullException)
 }
 
 // eviction
-cache.Set("foo1", "foo", new MyMemoryCacheEntryOptions()
+cache.Set("foo1", 987, new MyMemoryCacheEntryOptions()
 {
     Duration = TimeSpan.FromSeconds(1)
 });
@@ -71,7 +71,7 @@ catch (ObjectDisposedException)
     Console.WriteLine("Disposal works");
 }
 
-public class MyMemoryCache : IDisposable
+public sealed class MyMemoryCache : IDisposable
 {
     private readonly MyMemoryCacheOptions _options;
     private ConcurrentDictionary<string, MyMemoryCacheEntry> _cache = [];
@@ -100,7 +100,7 @@ public class MyMemoryCache : IDisposable
         });
     }
     
-    public void Set(string key, object? value, MyMemoryCacheEntryOptions? entryOptions = null)
+    public void Set<TValue>(string key, TValue? value, MyMemoryCacheEntryOptions? entryOptions = null)
     {
         CheckDisposed();
         Validate(key);
@@ -108,9 +108,9 @@ public class MyMemoryCache : IDisposable
         _cache[key] = new MyMemoryCacheEntry(value, DateTimeOffset.Now.Add(entryOptions?.Duration ?? _options.DefaultDuration));
     }
 
-    public object? Get(string key)
+    public TValue? Get<TValue>(string key)
     {
-        return TryGetValue(key, out var value) ? value : null;
+        return TryGetValue<TValue>(key, out var value) ? value : default;
     }
 
     public void Remove(string key)
@@ -121,7 +121,7 @@ public class MyMemoryCache : IDisposable
         _ = _cache.TryRemove(key, out _);
     }
 
-    public bool TryGetValue(string key, out object? value)
+    public bool TryGetValue<TValue>(string key, out TValue? value)
     {
         CheckDisposed();
 
@@ -129,14 +129,14 @@ public class MyMemoryCache : IDisposable
         {
             if (entry.AbsoluteExpiration > DateTimeOffset.Now)
             {
-                value = entry.Value;
+                value = (TValue?)entry.Value;
                 return true;
             }
 
             Remove(key);
         }
 
-        value = null;
+        value = default;
         return false;
     }
     
@@ -164,7 +164,7 @@ public class MyMemoryCache : IDisposable
         }
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!_disposedValue)
         {
