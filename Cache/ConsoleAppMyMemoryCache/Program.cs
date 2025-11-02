@@ -59,12 +59,24 @@ cache.Set("bar1", "bar", new MyMemoryCacheEntryOptions()
 
 await Task.Delay(TimeSpan.FromSeconds(1.5));
 
-Console.WriteLine("Hi!");
+// disposal
+cache.Dispose();
+try
+{
+    cache.Set("foo", "foo");
+    Console.WriteLine("FAIL");
+}
+catch (ObjectDisposedException)
+{
+    Console.WriteLine("Disposal works");
+}
 
-public class MyMemoryCache
+public class MyMemoryCache : IDisposable
 {
     private readonly MyMemoryCacheOptions _options;
-    private readonly ConcurrentDictionary<string, MyMemoryCacheEntry> _cache = [];
+    private ConcurrentDictionary<string, MyMemoryCacheEntry> _cache = [];
+    private bool _disposedValue;
+    private CancellationTokenSource _cts = new();
 
     public MyMemoryCache(MyMemoryCacheOptions? options = null)
     {
@@ -72,17 +84,25 @@ public class MyMemoryCache
         
         Task.Run(async () =>
         {
-            while (true)
+            while (!_cts.IsCancellationRequested)
             {
-                await Task.Delay(_options.EvictionInterval);
-                Console.WriteLine("Evicting expired entries");
-                EvictExpired();
+                try
+                {
+                    await Task.Delay(_options.EvictionInterval, _cts.Token);
+                    Console.WriteLine("Evicting expired entries");
+                    EvictExpired();
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
             }
         });
     }
     
     public void Set(string key, object? value, MyMemoryCacheEntryOptions? entryOptions = null)
     {
+        CheckDisposed();
         Validate(key);
         
         _cache[key] = new MyMemoryCacheEntry(value, DateTimeOffset.Now.Add(entryOptions?.Duration ?? _options.DefaultDuration));
@@ -95,6 +115,7 @@ public class MyMemoryCache
 
     public void Remove(string key)
     {
+        CheckDisposed();
         Validate(key);
         
         _ = _cache.TryRemove(key, out _);
@@ -102,6 +123,8 @@ public class MyMemoryCache
 
     public bool TryGetValue(string key, out object? value)
     {
+        CheckDisposed();
+
         if (_cache.TryGetValue(key, out var entry))
         {
             if (entry.AbsoluteExpiration > DateTimeOffset.Now)
@@ -131,6 +154,37 @@ public class MyMemoryCache
     private void Validate(string key)
     {
         ArgumentNullException.ThrowIfNull(key);
+    }
+    
+    private void CheckDisposed()
+    {
+        if (_disposedValue)
+        {
+            throw new ObjectDisposedException(nameof(MyMemoryCache));
+        }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _cts.Cancel();
+                _cts.Dispose();
+                _cts = null!;
+            }
+
+            _cache = null!; // force null for garbage collection
+            _disposedValue = true;
+        }
+    }
+    
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
 
