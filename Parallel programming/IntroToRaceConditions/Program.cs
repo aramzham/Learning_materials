@@ -4,6 +4,9 @@ using System.Diagnostics;
 
 Console.WriteLine("Hello, World!");
 
+// locks
+Lock lockingMechanism = new Lock();
+
 bool result = false;
 int loopIterations = 0;
 
@@ -20,19 +23,24 @@ while (loopIterations < 1_000)
     loopIterations++;
 }
 
+Trace.WriteLine($"Program completed on thread {Environment.CurrentManagedThreadId}");
+
 async Task SimulateLongRunningTask(string name, bool setResult, CancellationToken cancellationToken)
 {
     Trace.WriteLine($"{name} started on thread {Environment.CurrentManagedThreadId}");
     
-    await Task.Delay(2_000);
+    await Task.Delay(TimeSpan.FromMilliseconds(2));
 
-    result = setResult;
-    
-    Trace.WriteLine($"Set {nameof(result)} to {setResult}");
-
-    if (result != setResult)
+    lock (lockingMechanism)
     {
-        throw new Exception("Race condition detected!!");
+        result = setResult;
+    
+        Trace.WriteLine($"Set {nameof(result)} to {setResult}");
+
+        if (result != setResult)
+        {
+            throw new Exception("Race condition detected!!");
+        }
     }
 
     Console.WriteLine($"{name} completed on thread {Environment.CurrentManagedThreadId}!!");
