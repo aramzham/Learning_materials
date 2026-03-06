@@ -29,12 +29,13 @@ while (loopIterations < 1_000)
 }
 
 Console.WriteLine($"Program completed on thread {Environment.CurrentManagedThreadId}");
+return;
 
 async Task SimulateLongRunningTask(string name, bool setResult, CancellationToken cancellationToken)
 {
     Trace.WriteLine($"{name} started on thread {Environment.CurrentManagedThreadId}");
     
-    await Task.Delay(TimeSpan.FromMilliseconds(2));
+    await Task.Delay(TimeSpan.FromMilliseconds(2), cancellationToken);
 
     // lock (lockingMechanism)
     // {
@@ -65,7 +66,7 @@ async Task SimulateLongRunningTaskWithInt(string name, int setNumber, Cancellati
 {
     Trace.WriteLine($"{name} started on thread {Environment.CurrentManagedThreadId}");
     
-    await Task.Delay(TimeSpan.FromMilliseconds(2));
+    await Task.Delay(TimeSpan.FromMilliseconds(2), cancellationToken);
     
     Interlocked.CompareExchange(ref number, setNumber, number);
 
