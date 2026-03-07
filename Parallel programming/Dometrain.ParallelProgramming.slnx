@@ -2,4 +2,5 @@
   <Project Path="Deadlocks/Deadlocks.csproj" />
   <Project Path="IntroToRaceConditions/IntroToRaceConditions.csproj" />
   <Project Path="TaskWhenAll/TaskWhenAll.csproj" />
+  <Project Path="TaskWhenAny/TaskWhenAny.csproj" />
 </Solution>
