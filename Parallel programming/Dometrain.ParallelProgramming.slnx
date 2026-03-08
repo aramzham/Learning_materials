@@ -3,4 +3,5 @@
   <Project Path="IntroToRaceConditions/IntroToRaceConditions.csproj" />
   <Project Path="TaskWhenAll/TaskWhenAll.csproj" />
   <Project Path="TaskWhenAny/TaskWhenAny.csproj" />
+  <Project Path="TaskWhenEach/TaskWhenEach.csproj" />
 </Solution>
