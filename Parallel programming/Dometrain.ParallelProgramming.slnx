@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="Deadlocks/Deadlocks.csproj" />
   <Project Path="IntroToRaceConditions/IntroToRaceConditions.csproj" />
+  <Project Path="ParallelInvoke/ParallelInvoke.csproj" />
   <Project Path="TaskWhenAll/TaskWhenAll.csproj" />
   <Project Path="TaskWhenAny/TaskWhenAny.csproj" />
   <Project Path="TaskWhenEach/TaskWhenEach.csproj" />
