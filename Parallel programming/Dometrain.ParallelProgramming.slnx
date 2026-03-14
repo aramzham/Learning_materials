@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Channels/Channels.csproj" />
   <Project Path="Deadlocks/Deadlocks.csproj" />
   <Project Path="IntroToRaceConditions/IntroToRaceConditions.csproj" />
   <Project Path="ParallelFor/ParallelFor.csproj" />
