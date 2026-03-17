@@ -4,6 +4,7 @@
   <Project Path="IntroToRaceConditions/IntroToRaceConditions.csproj" />
   <Project Path="ParallelFor/ParallelFor.csproj" />
   <Project Path="ParallelInvoke/ParallelInvoke.csproj" />
+  <Project Path="PLinq/PLinq.csproj" />
   <Project Path="TaskWhenAll/TaskWhenAll.csproj" />
   <Project Path="TaskWhenAny/TaskWhenAny.csproj" />
   <Project Path="TaskWhenEach/TaskWhenEach.csproj" />
